@@ -1,0 +1,116 @@
+{
+	"$schema": "https://aka.ms/winget-packages.schema.2.0.json",
+	"CreationDate": "2025-09-22T10:10:16.717-00:00",
+	"Sources": [
+		{
+			"Packages": [
+				{
+					"PackageIdentifier": "7zip.7zip"
+				},
+				{
+					"PackageIdentifier": "Docker.DockerDesktop"
+				},
+				{
+					"PackageIdentifier": "Git.Git"
+				},
+				{
+					"PackageIdentifier": "Mozilla.Firefox"
+				},
+				{
+					"PackageIdentifier": "AntibodySoftware.WizTree"
+				},
+				{
+					"PackageIdentifier": "JanDeDobbeleer.OhMyPosh"
+				},
+				{
+					"PackageIdentifier": "GitHub.cli"
+				},
+				{
+					"PackageIdentifier": "Logitech.GHUB"
+				},
+				{
+					"PackageIdentifier": "Nextcloud.NextcloudDesktop"
+				},
+				{
+					"PackageIdentifier": "Cloudflare.Warp"
+				},
+				{
+					"PackageIdentifier": "hoppscotch.Hoppscotch"
+				},
+				{
+					"PackageIdentifier": "Amazon.AWSCLI"
+				},
+				{
+					"PackageIdentifier": "OpenJS.NodeJS"
+				},
+				{
+					"PackageIdentifier": "Google.Chrome"
+				},
+				{
+					"PackageIdentifier": "Microsoft.SQLServerManagementStudio"
+				},
+				{
+					"PackageIdentifier": "JetBrains.Rider"
+				},
+				{
+					"PackageIdentifier": "Microsoft.VisualStudio.2022.Community"
+				},
+				{
+					"PackageIdentifier": "Microsoft.PowerShell"
+				},
+				{
+					"PackageIdentifier": "Python.Launcher"
+				},
+				{
+					"PackageIdentifier": "Microsoft.DotNet.SDK.9"
+				},
+				{
+					"PackageIdentifier": "Microsoft.DotNet.SDK.8"
+				},
+				{
+					"PackageIdentifier": "AgileBits.1Password"
+				},
+				{
+					"PackageIdentifier": "RingCentral.RingCentral"
+				},
+				{
+					"PackageIdentifier": "Notion.Notion"
+				},
+				{
+					"PackageIdentifier": "AgileBits.1Password.CLI"
+				},
+				{
+					"PackageIdentifier": "DevToys-app.DevToys"
+				},
+				{
+					"PackageIdentifier": "GitHub.GitHubDesktop"
+				},
+				{
+					"PackageIdentifier": "Gyan.FFmpeg"
+				},
+				{
+					"PackageIdentifier": "Microsoft.Edit"
+				},
+				{
+					"PackageIdentifier": "WinSCP.WinSCP"
+				},
+				{
+					"PackageIdentifier": "Microsoft.VisualStudioCode"
+				},
+				{
+					"PackageIdentifier": "Microsoft.PowerToys"
+				},
+				{
+					"PackageIdentifier": "Microsoft.WindowsTerminal"
+				}
+			],
+			"SourceDetails": {
+				"Argument": "https://cdn.winget.microsoft.com/cache",
+				"Identifier": "Microsoft.Winget.Source_8wekyb3d8bbwe",
+				"Name": "winget",
+				"Type": "Microsoft.PreIndexed.Package"
+			}
+		}
+	],
+	"WinGetVersion": "1.11.430"
+}
