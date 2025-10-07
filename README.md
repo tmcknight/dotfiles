@@ -12,4 +12,5 @@ cp windows\Terminal\settings.json $HOME\AppData\Local\Packages\Microsoft.Windows
 
 # powershell
 cp windows\PowerShell\Microsoft.PowerShell_profile.ps1 $HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1
+Unblock-File -Path $HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1
 ```
