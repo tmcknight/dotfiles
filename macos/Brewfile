@@ -1,0 +1,27 @@
+# Taps
+tap "jandedobbeleer/oh-my-posh"
+
+# CLI Tools
+brew "eza"
+brew "ffmpeg"
+brew "node"
+brew "gh"
+brew "msedit"
+brew "uv"
+brew "zsh-autosuggestions"
+brew "jandedobbeleer/oh-my-posh/oh-my-posh"
+
+# Applications
+cask "1password-cli"
+cask "claude"
+cask "claude-code"
+cask "copilot-cli"
+cask "dotnet-sdk"
+cask "figma"
+cask "firefox"
+cask "ghostty"
+cask "github"
+cask "google-chrome"
+cask "notion"
+cask "visual-studio-code"
+cask "rider"
