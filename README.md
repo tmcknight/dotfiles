@@ -2,13 +2,17 @@
 
 Everything I need to go from a fresh Mac, Linux box, or Windows box to fully set up in one command.
 
-## macOS
+## macOS / Linux
 
-On a fresh Mac, run:
+On a fresh Mac or Linux box, run:
 
 ```bash
-curl -fsSL -o /tmp/install.sh https://raw.githubusercontent.com/tmcknight/dotfiles/main/macos/install.sh && bash /tmp/install.sh
+curl -fsSL -o /tmp/install.sh https://raw.githubusercontent.com/tmcknight/dotfiles/main/install.sh && bash /tmp/install.sh
 ```
+
+The script auto-detects the OS and runs the appropriate setup.
+
+### macOS
 
 The setup script will:
 
@@ -21,13 +25,7 @@ The setup script will:
 7. Install the [Ghostty config](macos/ghostty.config) to `~/Library/Application Support/com.mitchellh.ghostty/`
 8. Set macOS system preferences (Finder settings, key repeat, etc.)
 
-## Linux (Debian/Ubuntu)
-
-On a fresh machine, run:
-
-```bash
-curl -fsSL -o /tmp/install.sh https://raw.githubusercontent.com/tmcknight/dotfiles/main/linux/install.sh && bash /tmp/install.sh
-```
+### Linux (Debian/Ubuntu)
 
 The setup script will:
 
