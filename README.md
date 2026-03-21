@@ -24,14 +24,6 @@ The setup script will:
 8. Install the [Ghostty config](macos/ghostty.config) to `~/Library/Application Support/com.mitchellh.ghostty/`
 9. Set macOS system preferences (Finder settings, key repeat, etc.)
 
-### Updating the Brewfile
-
-To capture any new packages you've installed:
-
-```bash
-brew bundle dump --file=macos/Brewfile --force
-```
-
 ## Windows
 
 ```pwsh
