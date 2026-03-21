@@ -9,9 +9,9 @@ alias lS='eza -1 --color=always --group-directories-first --icons'
 alias lt='eza --tree --level=2 --color=always --group-directories-first --icons'
 alias l.="eza -a | grep -E '^\.'"
 
-# Add oh-my-posh to PATH on Linux (installed to ~/bin by default)
-if [[ -d "$HOME/bin" ]]; then
-    export PATH="$HOME/bin:$PATH"
+# Add oh-my-posh to PATH on Linux (installed to ~/.local/bin by default)
+if [[ -d "$HOME/.local/bin" ]]; then
+    export PATH="$HOME/.local/bin:$PATH"
 fi
 
 if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
