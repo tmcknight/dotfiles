@@ -11,7 +11,7 @@ echo ""
 if [ "$SHELL" != "$(which zsh 2>/dev/null)" ]; then
     echo "[1/7] Installing and setting default shell to zsh..."
     sudo apt-get update
-    sudo apt-get install -y zsh zsh-autosuggestions
+    sudo apt-get install -y zsh zsh-autosuggestions unzip
     chsh -s "$(which zsh)"
 else
     echo "[1/7] Default shell is already zsh."
