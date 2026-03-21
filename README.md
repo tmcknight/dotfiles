@@ -12,15 +12,14 @@ curl -fsSL https://raw.githubusercontent.com/tmcknight/dotfiles/main/macos/insta
 
 The setup script will:
 
-1. Install Xcode Command Line Tools
-2. Set default shell to zsh
-3. Create `~/Developer` directory
-4. Install [Homebrew](https://brew.sh) (if not already installed)
-5. Install all packages and casks from the [Brewfile](macos/Brewfile)
-6. Copy the [.zshrc](macos/.zshrc) to `~/.zshrc` (backs up existing one first)
-7. Install the custom [oh-my-posh theme](macos/theme.omp.json) to `~/.config/oh-my-posh/`
-8. Install the [Ghostty config](macos/ghostty.config) to `~/Library/Application Support/com.mitchellh.ghostty/`
-9. Set macOS system preferences (Finder settings, key repeat, etc.)
+1. Set default shell to zsh
+2. Create `~/Developer` directory
+3. Install [Homebrew](https://brew.sh) (+ Xcode Command Line Tools if not already installed)
+4. Install all packages and casks from the [Brewfile](macos/Brewfile)
+5. Copy the [.zshrc](macos/.zshrc) to `~/.zshrc` (backs up existing one first)
+6. Install the custom [oh-my-posh theme](macos/theme.omp.json) to `~/.config/oh-my-posh/`
+7. Install the [Ghostty config](macos/ghostty.config) to `~/Library/Application Support/com.mitchellh.ghostty/`
+8. Set macOS system preferences (Finder settings, key repeat, etc.)
 
 ## Windows
 
