@@ -7,7 +7,7 @@ Everything I need to go from a fresh Mac (or Windows box) to fully set up in one
 On a fresh Mac, run:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/tmcknight/dotfiles/main/macos/install.sh | bash
+curl -fsSL -o /tmp/install.sh https://raw.githubusercontent.com/tmcknight/dotfiles/main/macos/install.sh && bash /tmp/install.sh
 ```
 
 The setup script will:
