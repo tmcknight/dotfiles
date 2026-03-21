@@ -10,7 +10,11 @@ alias lt='eza --tree --level=2 --color=always --group-directories-first --icons'
 alias l.="eza -a | grep -E '^\.'"
 
 if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
-eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/theme.omp.json)"
+    eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/theme.omp.json)"
 fi
 
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+if [[ "$(uname)" == "Darwin" ]]; then
+    source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+else
+    source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
