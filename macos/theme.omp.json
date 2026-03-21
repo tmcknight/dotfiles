@@ -42,12 +42,12 @@
         },
         {
           "leading_diamond": "\ue0b6",
-          "trailing_diamond": "\ue0b0",
           "template": " {{ .UserName }} ",
           "foreground": "p:black",
+          "powerline_symbol": "\ue0b0",
           "background": "p:yellow",
           "type": "session",
-          "style": "diamond"
+          "style": "powerline"
         },
         {
           "options": {
