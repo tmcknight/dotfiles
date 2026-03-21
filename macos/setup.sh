@@ -34,7 +34,7 @@ fi
 
 # Step 2: Install packages from Brewfile
 echo "[4/8] Installing packages from Brewfile..."
-brew bundle --file="$SCRIPT_DIR/Brewfile"
+brew bundle --verbose --file="$SCRIPT_DIR/Brewfile"
 
 # Step 3: Copy .zshrc and oh-my-posh theme
 echo "[5/8] Installing .zshrc..."
