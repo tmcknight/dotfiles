@@ -35,8 +35,8 @@
           "leading_diamond": "\ue0b6",
           "trailing_diamond": "\ue0b0",
           "template": "{{ if .SSHSession }} \ueba9 {{ .HostName }} {{ end }}",
-          "foreground": "p:white",
-          "background": "p:red",
+          "foreground": "p:black",
+          "background": "#2BBCB3",
           "type": "session",
           "style": "diamond"
         },
