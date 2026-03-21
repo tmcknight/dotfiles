@@ -4,12 +4,10 @@ Personal configuration files for setting up new machines.
 
 ## macOS
 
-Copy the dotfiles to the new machine and run the setup script:
+On a fresh Mac, run:
 
 ```bash
-# from your current machine (enable Remote Login on the new Mac first)
-scp -r ~/Developer/dotfiles user@new-mac:~/.dotfiles
-ssh user@new-mac "~/.dotfiles/macos/setup.sh"
+curl -fsSL https://raw.githubusercontent.com/tmcknight/dotfiles/main/macos/install.sh | bash
 ```
 
 The setup script will:
