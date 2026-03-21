@@ -1,6 +1,6 @@
 # Dotfiles
 
-Personal configuration files for setting up new machines.
+Everything I need to go from a fresh Mac (or Windows box) to fully set up in one command.
 
 ## macOS
 
