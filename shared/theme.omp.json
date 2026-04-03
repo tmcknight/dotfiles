@@ -33,20 +33,12 @@
       "segments": [
         {
           "leading_diamond": "\ue0b6",
-          "template": "{{ if .SSHSession }} \ueba9 {{ .HostName }} {{ end }}",
-          "foreground": "p:white",
-          "background": "p:blue",
-          "type": "session",
-          "style": "diamond"
-        },
-        {
-          "leading_diamond": "\ue0b6",
-          "powerline_symbol": "\ue0b0",
-          "template": " {{ .UserName }} ",
+          "template": "{{ if .SSHSession }}<p:white> \ueba9 {{ .HostName }} </><p:blue,p:yellow>\ue0b0</>{{ end }}<p:black> {{ .UserName }} </>",
           "foreground": "p:black",
+          "powerline_symbol": "\ue0b0",
           "background": "p:yellow",
           "type": "session",
-          "style": "powerline"
+          "style": "diamond"
         },
         {
           "options": {
