@@ -44,6 +44,7 @@ if [ -f "$HOME/.zshrc" ]; then
     cp "$HOME/.zshrc" "$HOME/.zshrc.backup"
 fi
 cp "$SHARED_DIR/.zshrc" "$HOME/.zshrc"
+cp "$SHARED_DIR/.aliases" "$HOME/.aliases"
 
 echo "[6/8] Installing oh-my-posh theme..."
 mkdir -p "$HOME/.config/oh-my-posh"
