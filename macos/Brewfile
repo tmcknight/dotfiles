@@ -14,7 +14,7 @@ brew "jandedobbeleer/oh-my-posh/oh-my-posh"
 # Applications
 cask "1password-cli"
 cask "claude"
-cask "claude-code"
+cask "claude-code@latest"
 cask "copilot-cli"
 cask "docker-desktop"
 cask "dotnet-sdk"
