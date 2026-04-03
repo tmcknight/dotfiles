@@ -32,8 +32,7 @@
       "alignment": "left",
       "segments": [
         {
-          "leading_diamond": "\ue0b6",
-          "template": "{{ if .SSHSession }}<p:white,p:blue> \ueba9 {{ .HostName }} </><p:blue,p:yellow>\ue0b0</>{{ end }}<p:black> {{ .UserName }} </>",
+          "template": "{{ if .SSHSession }}<p:blue,transparent>\ue0b6</><p:white,p:blue> \ueba9 {{ .HostName }} </><p:blue,p:yellow>\ue0b0</>{{ else }}<p:yellow,transparent>\ue0b6</>{{ end }}<p:black> {{ .UserName }} </>",
           "foreground": "p:black",
           "powerline_symbol": "\ue0b0",
           "background": "p:yellow",
