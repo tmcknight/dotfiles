@@ -66,8 +66,35 @@ defaults write com.apple.finder ShowPathbar -bool true
 # Show status bar in Finder
 defaults write com.apple.finder ShowStatusBar -bool true
 
+# Set new Finder windows to open to Desktop
+defaults write com.apple.finder NewWindowTarget -string "PfDe"
+defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Desktop/"
+
+# Show icons for external drives, internal drives, servers, and removable media on Desktop
+defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
+defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
+defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
+defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+
 # Disable natural scroll direction
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
+
+# Show full POSIX path in Finder title bar
+defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+
+# Disable warning when changing a file extension
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+
+# Use list view as default in all Finder windows
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+
+# Show ~/Library folder (hidden by default)
+chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
+
+# Expand General and Open With panes in Get Info window
+defaults write com.apple.finder FXInfoPanesExpanded -dict \
+        General -bool true \
+        OpenWith -bool true \
 
 # Restart Finder to apply changes
 killall Finder 2>/dev/null || true
