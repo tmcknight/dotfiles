@@ -96,36 +96,27 @@
       "segments": [
         {
           "type": "claude",
-          "style": "diamond",
+          "style": "plain",
           "template": "  5h {{ .FiveHourGauge }} {{ .FiveHourUsage.String }}%{{ if gt (int .FiveHourResetsIn.Minutes) 0 }} · resets {{ int .FiveHourResetsIn.Hours }}h{{ mod (int .FiveHourResetsIn.Minutes) 60 }}m{{ end }} ",
-          "foreground": "p:fgb",
+          "foreground": "p:fgm",
           "foreground_templates": [
             "{{ if gt (int .RateLimits.FiveHour.UsedPercentage) 80}}p:redb{{ else if gt (int .RateLimits.FiveHour.UsedPercentage) 60}}p:orangeb{{ end }}"
           ],
-          "background": "p:gray",
-          "background_templates": [
-            "{{ if gt (int .RateLimits.FiveHour.UsedPercentage) 80}}p:red{{ else if gt (int .RateLimits.FiveHour.UsedPercentage) 60}}p:orange{{ end }}"
-          ],
+          "background": "transparent",
           "options": {
             "gauge_marked_char": "●",
             "gauge_unmarked_char": "○"
-          },
-          "trailing_diamond": "",
-          "leading_diamond": ""
+          }
         },
         {
           "type": "claude",
-          "style": "diamond",
-          "trailing_diamond": "",
+          "style": "plain",
           "options": {
             "gauge_marked_char": "●",
             "gauge_unmarked_char": "○"
           },
-          "background": "p:navy",
-          "background_templates": [
-            "{{ if gt (int .RateLimits.SevenDay.UsedPercentage) 80}}p:red{{ else if gt (int .RateLimits.SevenDay.UsedPercentage) 60}}p:orange{{ end }}"
-          ],
-          "foreground": "p:fgb",
+          "background": "transparent",
+          "foreground": "p:fgm",
           "foreground_templates": [
             "{{ if gt (int .RateLimits.SevenDay.UsedPercentage) 80}}p:redb{{ else if gt (int .RateLimits.SevenDay.UsedPercentage) 60}}p:orangeb{{ end }}"
           ],
