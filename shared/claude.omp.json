@@ -38,6 +38,11 @@
           "template": "   {{ .Path }} ",
           "foreground": "p:fgb",
           "background": "p:blue",
+          "options": {
+            "style": "folder",
+            "home_icon": "~",
+            "folder_separator_icon": "  "
+          },
           "leading_diamond": "",
           "trailing_diamond": ""
         },
