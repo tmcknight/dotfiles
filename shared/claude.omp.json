@@ -107,7 +107,14 @@
             "gauge_marked_char": "●",
             "gauge_unmarked_char": "○"
           }
-        },
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "newline": true,
+      "segments": [
         {
           "type": "claude",
           "style": "plain",
