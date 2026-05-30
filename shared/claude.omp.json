@@ -81,7 +81,7 @@
           "background": "transparent",
           "foreground": "p:fgm",
           "foreground_templates": [
-            "{{ if gt .TokenUsagePercent 80 }}p:redb{{ else if gt .TokenUsagePercent 60 }}p:orangeb{{ end }}"
+            "{{ $u := int (div (mul (int .TokenUsagePercent) (int .ContextWindow.ContextWindowSize)) 100) }}{{ if gt $u 550000 }}p:redb{{ else if gt $u 270000 }}p:yellowb{{ end }}"
           ],
           "template": " 󰯉 ctx {{ $e := int (min 240 (int (div (add (mul (int .TokenUsagePercent) 240) 50) 100))) }}{{ $f := int (div $e 8) }}{{ $r := int (mod $e 8) }}{{ repeat $f \"█\" }}{{ if gt $r 0 }}{{ index (list \"\" \"▏\" \"▎\" \"▍\" \"▌\" \"▋\" \"▊\" \"▉\") $r }}{{ repeat (int (sub 29 $f)) \" \" }}{{ else }}{{ repeat (int (sub 30 $f)) \" \" }}{{ end }} {{ .TokenUsagePercent.String }}% · {{ .FormattedTokens }} / {{ if ge .ContextWindow.ContextWindowSize 1000000 }}{{ div .ContextWindow.ContextWindowSize 1000000 }}M{{ else }}{{ div .ContextWindow.ContextWindowSize 1000 }}K{{ end }} "
         }
