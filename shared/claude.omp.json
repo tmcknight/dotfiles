@@ -98,7 +98,7 @@
           "template": "   5h │{{ $e := int (min 240 (int (div (add (mul (int .FiveHourUsage) 240) 50) 100))) }}{{ $f := int (div $e 8) }}{{ $r := int (mod $e 8) }}{{ repeat $f \"█\" }}{{ if gt $r 0 }}{{ index (list \"\" \"▏\" \"▎\" \"▍\" \"▌\" \"▋\" \"▊\" \"▉\") $r }}{{ repeat (int (sub 29 $f)) \" \" }}{{ else }}{{ repeat (int (sub 30 $f)) \" \" }}{{ end }}│ {{ .FiveHourUsage.String }}%{{ if gt (int .FiveHourResetsIn.Minutes) 0 }} · {{ int .FiveHourResetsIn.Hours }}h{{ mod (int .FiveHourResetsIn.Minutes) 60 }}m{{ end }} ",
           "foreground": "p:fgm",
           "foreground_templates": [
-            "{{ if gt (int .RateLimits.FiveHour.UsedPercentage) 80}}p:redb{{ else if gt (int .RateLimits.FiveHour.UsedPercentage) 60}}p:orangeb{{ end }}"
+            "{{ if gt (int .FiveHourUsage) 90 }}p:redb{{ else if gt (int .FiveHourUsage) 75 }}p:yellowb{{ end }}"
           ],
           "background": "transparent"
         }
@@ -115,7 +115,7 @@
           "background": "transparent",
           "foreground": "p:fgm",
           "foreground_templates": [
-            "{{ if gt (int .RateLimits.SevenDay.UsedPercentage) 80}}p:redb{{ else if gt (int .RateLimits.SevenDay.UsedPercentage) 60}}p:orangeb{{ end }}"
+            "{{ if gt (int .SevenDayUsage) 90 }}p:redb{{ else if gt (int .SevenDayUsage) 75 }}p:yellowb{{ end }}"
           ],
           "template": "   7d │{{ $e := int (min 240 (int (div (add (mul (int .SevenDayUsage) 240) 50) 100))) }}{{ $f := int (div $e 8) }}{{ $r := int (mod $e 8) }}{{ repeat $f \"█\" }}{{ if gt $r 0 }}{{ index (list \"\" \"▏\" \"▎\" \"▍\" \"▌\" \"▋\" \"▊\" \"▉\") $r }}{{ repeat (int (sub 29 $f)) \" \" }}{{ else }}{{ repeat (int (sub 30 $f)) \" \" }}{{ end }}│ {{ .SevenDayUsage.String }}%{{ if gt (int .SevenDayResetsIn.Hours) 0 }} · {{ div (int .SevenDayResetsIn.Hours) 24 }}d{{ mod (int .SevenDayResetsIn.Hours) 24 }}h{{ end }} "
         }
