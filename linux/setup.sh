@@ -76,9 +76,12 @@ fi
 cp "$SHARED_DIR/.zshrc" "$HOME/.zshrc"
 cp "$SHARED_DIR/.aliases" "$HOME/.aliases"
 
-# oh-my-posh theme
+# oh-my-posh themes
 mkdir -p "$HOME/.config/oh-my-posh"
 cp "$SHARED_DIR/theme.omp.json" "$HOME/.config/oh-my-posh/theme.omp.json"
+cp "$SHARED_DIR/claude.omp.json" "$HOME/.config/oh-my-posh/claude.omp.json"
+# To enable the Claude Code statusline, add this to ~/.claude/settings.json:
+#   "statusLine": { "type": "command", "command": "oh-my-posh claude --config ~/.config/oh-my-posh/claude.omp.json", "padding": 0 }
 
 echo ""
 echo "=== Setup complete! ==="

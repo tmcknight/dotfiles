@@ -1,0 +1,137 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "version": 4,
+  "final_space": true,
+  "palette": {
+    "bg": "#22272e",
+    "fg": "#adbac7",
+    "fgb": "#cdd9e5",
+    "fgm": "#768390",
+    "fgs": "#545d68",
+    "ink": "#1c2128",
+    "border": "#444c56",
+    "gray": "#636e7b",
+    "blue": "#316dca",
+    "navy": "#1b4b91",
+    "green": "#347d39",
+    "yellow": "#966600",
+    "orange": "#ae5622",
+    "red": "#c93c37",
+    "purple": "#8256d0",
+    "pink": "#ae4c82",
+    "cyan": "#1b7f8a",
+    "blueb": "#6cb6ff",
+    "greenb": "#6bc46d",
+    "yellowb": "#daaa3f",
+    "orangeb": "#e0823d",
+    "redb": "#ff938a",
+    "purpleb": "#dcbdfb"
+  },
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "type": "path",
+          "style": "diamond",
+          "options": {
+            "style": "agnoster_short",
+            "max_depth": 2
+          },
+          "template": "   {{ .Path }} ",
+          "foreground": "p:fgb",
+          "background": "p:blue",
+          "leading_diamond": "",
+          "trailing_diamond": ""
+        },
+        {
+          "type": "git",
+          "style": "diamond",
+          "options": {
+            "fetch_status": true,
+            "fetch_upstream_icon": true,
+            "branch_template": "{{ trunc 22 .Branch }}"
+          },
+          "template": " {{ .UpstreamIcon }}{{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }}  {{ .Working.String }}{{ end }}{{ if .Staging.Changed }}  {{ .Staging.String }}{{ end }} ",
+          "foreground": "p:fgb",
+          "foreground_templates": [
+            "{{ if or (.Working.Changed) (.Staging.Changed) }}p:ink{{ end }}",
+            "{{ if and (gt .Ahead 0) (gt .Behind 0) }}p:fgb{{ end }}",
+            "{{ if gt .Ahead 0 }}p:ink{{ end }}"
+          ],
+          "background": "p:green",
+          "background_templates": [
+            "{{ if or (.Working.Changed) (.Staging.Changed) }}p:yellow{{ end }}",
+            "{{ if and (gt .Ahead 0) (gt .Behind 0) }}p:red{{ end }}",
+            "{{ if gt .Ahead 0 }}p:blueb{{ end }}",
+            "{{ if gt .Behind 0 }}p:purple{{ end }}"
+          ],
+          "trailing_diamond": ""
+        },
+        {
+          "type": "claude",
+          "style": "diamond",
+          "template": " 󰯉 {{ replace \" (1M context)\" \"\" .Model.DisplayName }}  {{ .TokenGaugeUsed }} {{ .TokenUsagePercent.String }}% · {{ .FormattedTokens }} / {{ if ge .ContextWindow.ContextWindowSize 1000000 }}{{ div .ContextWindow.ContextWindowSize 1000000 }}M{{ else }}{{ div .ContextWindow.ContextWindowSize 1000 }}K{{ end }} ",
+          "foreground": "p:fgb",
+          "foreground_templates": [
+            "{{ if gt .TokenUsagePercent 80 }}p:redb{{ else if gt .TokenUsagePercent 60 }}p:orangeb{{ else }}p:fgb{{ end }}"
+          ],
+          "background": "p:purple",
+          "background_templates": [
+            "{{ if gt .TokenUsagePercent 80 }}p:red{{ else if gt .TokenUsagePercent 60 }}p:orange{{ else }}p:purple{{ end }}"
+          ],
+          "options": {
+            "gauge_marked_char": "●",
+            "gauge_unmarked_char": "○"
+          },
+          "trailing_diamond": ""
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "type": "claude",
+          "style": "diamond",
+          "template": "  5h {{ .FiveHourGauge }} {{ .FiveHourUsage.String }}%{{ if gt (int .FiveHourResetsIn.Minutes) 0 }} · resets {{ int .FiveHourResetsIn.Hours }}h{{ mod (int .FiveHourResetsIn.Minutes) 60 }}m{{ end }} ",
+          "foreground": "p:fgb",
+          "foreground_templates": [
+            "{{ if gt (int .RateLimits.FiveHour.UsedPercentage) 80}}p:redb{{ else if gt (int .RateLimits.FiveHour.UsedPercentage) 60}}p:orangeb{{ end }}"
+          ],
+          "background": "p:gray",
+          "background_templates": [
+            "{{ if gt (int .RateLimits.FiveHour.UsedPercentage) 80}}p:red{{ else if gt (int .RateLimits.FiveHour.UsedPercentage) 60}}p:orange{{ end }}"
+          ],
+          "options": {
+            "gauge_marked_char": "●",
+            "gauge_unmarked_char": "○"
+          },
+          "trailing_diamond": "",
+          "leading_diamond": ""
+        },
+        {
+          "type": "claude",
+          "style": "diamond",
+          "trailing_diamond": "",
+          "options": {
+            "gauge_marked_char": "●",
+            "gauge_unmarked_char": "○"
+          },
+          "background": "p:navy",
+          "background_templates": [
+            "{{ if gt (int .RateLimits.SevenDay.UsedPercentage) 80}}p:red{{ else if gt (int .RateLimits.SevenDay.UsedPercentage) 60}}p:orange{{ end }}"
+          ],
+          "foreground": "p:fgb",
+          "foreground_templates": [
+            "{{ if gt (int .RateLimits.SevenDay.UsedPercentage) 80}}p:redb{{ else if gt (int .RateLimits.SevenDay.UsedPercentage) 60}}p:orangeb{{ end }}"
+          ],
+          "template": "  7d {{ .SevenDayGauge }} {{ .SevenDayUsage.String }}%{{ if gt (int .SevenDayResetsIn.Hours) 0 }} · resets {{ div (int .SevenDayResetsIn.Hours) 24 }}d{{ mod (int .SevenDayResetsIn.Hours) 24 }}h{{ end }} "
+        }
+      ]
+    }
+  ]
+}
