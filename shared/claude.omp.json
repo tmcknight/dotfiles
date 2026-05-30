@@ -83,7 +83,7 @@
           "foreground_templates": [
             "{{ if gt .TokenUsagePercent 80 }}p:redb{{ else if gt .TokenUsagePercent 60 }}p:orangeb{{ end }}"
           ],
-          "template": " 󰯉 󰯉󰯉 {{ $m := int (min 15 (int (div (add (mul (int .TokenUsagePercent) 15) 99) 100))) }}{{ repeat $m \"●\" }}{{ repeat (int (sub 15 $m)) \"○\" }} {{ .TokenUsagePercent.String }}% · {{ .FormattedTokens }} / {{ if ge .ContextWindow.ContextWindowSize 1000000 }}{{ div .ContextWindow.ContextWindowSize 1000000 }}M{{ else }}{{ div .ContextWindow.ContextWindowSize 1000 }}K{{ end }} "
+          "template": " 󰯉󰯉󰯉󰯉 {{ $m := int (min 15 (int (div (add (mul (int .TokenUsagePercent) 15) 99) 100))) }}{{ repeat $m \"●\" }}{{ repeat (int (sub 15 $m)) \"○\" }} {{ .TokenUsagePercent.String }}% · {{ .FormattedTokens }} / {{ if ge .ContextWindow.ContextWindowSize 1000000 }}{{ div .ContextWindow.ContextWindowSize 1000000 }}M{{ else }}{{ div .ContextWindow.ContextWindowSize 1000 }}K{{ end }} "
         }
       ]
     },
