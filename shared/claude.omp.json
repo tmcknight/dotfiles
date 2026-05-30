@@ -63,6 +63,10 @@
             "{{ if gt .Ahead 0 }}p:blueb{{ end }}",
             "{{ if gt .Behind 0 }}p:purple{{ end }}"
           ],
+          "options": {
+            "fetch_status": true,
+            "fetch_upstream_icon": true
+          },
           "trailing_diamond": ""
         },
         {
