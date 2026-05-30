@@ -72,20 +72,35 @@
         {
           "type": "claude",
           "style": "diamond",
-          "template": " 󰯉 {{ replace \" (1M context)\" \"\" .Model.DisplayName }}  {{ .TokenGaugeUsed }} {{ .TokenUsagePercent.String }}% · {{ .FormattedTokens }} / {{ if ge .ContextWindow.ContextWindowSize 1000000 }}{{ div .ContextWindow.ContextWindowSize 1000000 }}M{{ else }}{{ div .ContextWindow.ContextWindowSize 1000 }}K{{ end }} ",
+          "template": " 󰯉 {{ replace \" (1M context)\" \"\" .Model.DisplayName }} ",
           "foreground": "p:fgb",
-          "foreground_templates": [
-            "{{ if gt .TokenUsagePercent 80 }}p:redb{{ else if gt .TokenUsagePercent 60 }}p:orangeb{{ else }}p:fgb{{ end }}"
-          ],
           "background": "p:purple",
-          "background_templates": [
-            "{{ if gt .TokenUsagePercent 80 }}p:red{{ else if gt .TokenUsagePercent 60 }}p:orange{{ else }}p:purple{{ end }}"
-          ],
           "options": {
             "gauge_marked_char": "●",
             "gauge_unmarked_char": "○"
           },
           "trailing_diamond": ""
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "type": "claude",
+          "style": "plain",
+          "background": "transparent",
+          "foreground": "p:fgm",
+          "foreground_templates": [
+            "{{ if gt .TokenUsagePercent 80 }}p:redb{{ else if gt .TokenUsagePercent 60 }}p:orangeb{{ end }}"
+          ],
+          "template": " 󰯉 {{ .TokenGaugeUsed }} {{ .TokenUsagePercent.String }}% · {{ .FormattedTokens }} / {{ if ge .ContextWindow.ContextWindowSize 1000000 }}{{ div .ContextWindow.ContextWindowSize 1000000 }}M{{ else }}{{ div .ContextWindow.ContextWindowSize 1000 }}K{{ end }} ",
+          "options": {
+            "gauge_marked_char": "●",
+            "gauge_unmarked_char": "○"
+          }
         }
       ]
     },
