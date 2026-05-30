@@ -97,7 +97,7 @@
         {
           "type": "claude",
           "style": "plain",
-          "template": "  5h {{ .FiveHourGauge }} {{ .FiveHourUsage.String }}%{{ if gt (int .FiveHourResetsIn.Minutes) 0 }} · resets {{ int .FiveHourResetsIn.Hours }}h{{ mod (int .FiveHourResetsIn.Minutes) 60 }}m{{ end }} ",
+          "template": "  5h {{ .FiveHourGauge }} {{ .FiveHourUsage.String }}%{{ if gt (int .FiveHourResetsIn.Minutes) 0 }} · {{ int .FiveHourResetsIn.Hours }}h{{ mod (int .FiveHourResetsIn.Minutes) 60 }}m{{ end }} ",
           "foreground": "p:fgm",
           "foreground_templates": [
             "{{ if gt (int .RateLimits.FiveHour.UsedPercentage) 80}}p:redb{{ else if gt (int .RateLimits.FiveHour.UsedPercentage) 60}}p:orangeb{{ end }}"
@@ -127,7 +127,7 @@
           "foreground_templates": [
             "{{ if gt (int .RateLimits.SevenDay.UsedPercentage) 80}}p:redb{{ else if gt (int .RateLimits.SevenDay.UsedPercentage) 60}}p:orangeb{{ end }}"
           ],
-          "template": "  7d {{ .SevenDayGauge }} {{ .SevenDayUsage.String }}%{{ if gt (int .SevenDayResetsIn.Hours) 0 }} · resets {{ div (int .SevenDayResetsIn.Hours) 24 }}d{{ mod (int .SevenDayResetsIn.Hours) 24 }}h{{ end }} "
+          "template": "  7d {{ .SevenDayGauge }} {{ .SevenDayUsage.String }}%{{ if gt (int .SevenDayResetsIn.Hours) 0 }} · {{ div (int .SevenDayResetsIn.Hours) 24 }}d{{ mod (int .SevenDayResetsIn.Hours) 24 }}h{{ end }} "
         }
       ]
     }
