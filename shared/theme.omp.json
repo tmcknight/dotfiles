@@ -163,14 +163,14 @@
           "type": "shell",
           "style": "plain",
           "foreground": "p:fgb",
-          "background": "p:blue",
-          "template": "<p:blue,transparent></>  {{ .Name }} <transparent,p:blue></>"
+          "background": "p:gray",
+          "template": "<p:gray,transparent></>  {{ .Name }} <transparent,p:gray></>"
         },
         {
           "type": "ytm",
           "style": "powerline",
           "foreground": "p:fgb",
-          "background": "p:green",
+          "background": "p:gray",
           "template": "  {{ .Icon }}{{ if ne .Status \"stopped\" }}{{ .Artist }} - {{ .Track }}{{ end }} ",
           "powerline_symbol": "",
           "invert_powerline": true,
@@ -183,7 +183,7 @@
           "type": "time",
           "style": "diamond",
           "foreground": "p:fgb",
-          "background": "p:cyan",
+          "background": "p:gray",
           "template": " {{ .CurrentDate | date .Format }} ",
           "leading_diamond": "",
           "trailing_diamond": "",
