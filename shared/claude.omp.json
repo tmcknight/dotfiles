@@ -72,7 +72,7 @@
         {
           "type": "claude",
           "style": "diamond",
-          "template": " 󰯉 {{ replace \" (1M context)\" \"\" .Model.DisplayName }} ",
+          "template": " 󰯉 {{ replace \" (1M context)\" \"\" .Model.DisplayName }}{{ if .Effort.Level }} · {{ .Effort.Level }}{{ end }} ",
           "foreground": "p:fgb",
           "background": "p:purple",
           "trailing_diamond": ""
