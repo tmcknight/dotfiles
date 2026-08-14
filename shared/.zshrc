@@ -18,7 +18,7 @@ if [[ -d "$HOME/.local/bin" ]]; then
     export PATH="$HOME/.local/bin:$PATH"
 fi
 
-# Completion. Homebrew drops per-formula completions (gh, pnpm, az, uv) into
+# Completion. Homebrew drops per-formula completions (gh, az, uv) into
 # share/zsh/site-functions, which is not on the default fpath.
 if [[ -d "${HOMEBREW_PREFIX:-/opt/homebrew}/share/zsh/site-functions" ]]; then
     fpath=("${HOMEBREW_PREFIX:-/opt/homebrew}/share/zsh/site-functions" $fpath)
@@ -51,7 +51,8 @@ do
 done
 unset _zsh_autosuggest
 
-# fnm — Node version manager, installed by the Brewfile. Replaces a global node.
+# fnm — Node version manager, and the only source of node on any platform:
+# the Brewfile on macOS, the install script in linux/setup.sh.
 #   --use-on-cd               switch on cd, from .nvmrc/.node-version
 #   --version-file-strategy   also look in parent dirs, so monorepo subdirs work
 #   --resolve-engines         fall back to package.json engines.node
