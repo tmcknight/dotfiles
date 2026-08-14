@@ -4,6 +4,10 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SHARED_DIR="$SCRIPT_DIR/../shared"
 
+# shellcheck source-path=SCRIPTDIR
+# shellcheck source=../shared/lib.sh
+source "$SHARED_DIR/lib.sh"
+
 echo "=== Linux Setup ==="
 echo ""
 
@@ -81,16 +85,11 @@ fi
 echo "[7/7] Installing configuration files..."
 
 # .zshrc
-if [ -f "$HOME/.zshrc" ]; then
-    echo "  Backing up existing .zshrc to ~/.zshrc.backup"
-    cp "$HOME/.zshrc" "$HOME/.zshrc.backup"
-fi
-cp "$SHARED_DIR/.zshrc" "$HOME/.zshrc"
-cp "$SHARED_DIR/.aliases" "$HOME/.aliases"
+install_file "$SHARED_DIR/.zshrc" "$HOME/.zshrc"
+install_file "$SHARED_DIR/.aliases" "$HOME/.aliases"
 
 # oh-my-posh themes
-mkdir -p "$HOME/.config/oh-my-posh"
-cp "$SHARED_DIR/theme.omp.json" "$HOME/.config/oh-my-posh/theme.omp.json"
+install_file "$SHARED_DIR/theme.omp.json" "$HOME/.config/oh-my-posh/theme.omp.json"
 
 # Claude Code statusline.
 # The script parses its stdin JSON with jq.
@@ -100,16 +99,9 @@ if ! command -v jq &>/dev/null; then
 fi
 # To enable, add this to ~/.claude/settings.json:
 #   "statusLine": { "type": "command", "command": "bash ~/.claude/statusline-command.sh" }
-mkdir -p "$HOME/.claude"
-if [ -f "$HOME/.claude/statusline-command.sh" ]; then
-    echo "  Backing up existing statusline-command.sh to ~/.claude/statusline-command.sh.backup"
-    cp "$HOME/.claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh.backup"
-fi
-# rm first: on a dev machine this path may be a symlink back into the repo,
-# and cp would then try to copy the file onto itself and fail.
-rm -f "$HOME/.claude/statusline-command.sh"
-cp "$SHARED_DIR/claude-statusline.sh" "$HOME/.claude/statusline-command.sh"
-chmod +x "$HOME/.claude/statusline-command.sh"
+# No chmod needed: the repo tracks claude-statusline.sh as executable, and the
+# installed path is a symlink to it.
+install_file "$SHARED_DIR/claude-statusline.sh" "$HOME/.claude/statusline-command.sh"
 
 echo ""
 echo "=== Setup complete! ==="

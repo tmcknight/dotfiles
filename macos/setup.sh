@@ -4,6 +4,10 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SHARED_DIR="$SCRIPT_DIR/../shared"
 
+# shellcheck source-path=SCRIPTDIR
+# shellcheck source=../shared/lib.sh
+source "$SHARED_DIR/lib.sh"
+
 echo "=== macOS Setup ==="
 echo ""
 
@@ -39,34 +43,21 @@ brew bundle --verbose --file="$SCRIPT_DIR/Brewfile"
 
 # Step 3: Copy .zshrc and oh-my-posh theme
 echo "[5/8] Installing .zshrc..."
-if [ -f "$HOME/.zshrc" ]; then
-    echo "  Backing up existing .zshrc to ~/.zshrc.backup"
-    cp "$HOME/.zshrc" "$HOME/.zshrc.backup"
-fi
-cp "$SHARED_DIR/.zshrc" "$HOME/.zshrc"
-cp "$SHARED_DIR/.aliases" "$HOME/.aliases"
+install_file "$SHARED_DIR/.zshrc" "$HOME/.zshrc"
+install_file "$SHARED_DIR/.aliases" "$HOME/.aliases"
 
 echo "[6/8] Installing oh-my-posh themes..."
-mkdir -p "$HOME/.config/oh-my-posh"
-cp "$SHARED_DIR/theme.omp.json" "$HOME/.config/oh-my-posh/theme.omp.json"
+install_file "$SHARED_DIR/theme.omp.json" "$HOME/.config/oh-my-posh/theme.omp.json"
 
 # Claude Code statusline.
 # Requires jq. To enable, add this to ~/.claude/settings.json:
 #   "statusLine": { "type": "command", "command": "bash ~/.claude/statusline-command.sh" }
-mkdir -p "$HOME/.claude"
-if [ -f "$HOME/.claude/statusline-command.sh" ]; then
-    echo "  Backing up existing statusline-command.sh to ~/.claude/statusline-command.sh.backup"
-    cp "$HOME/.claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh.backup"
-fi
-# rm first: on a dev machine this path may be a symlink back into the repo,
-# and cp would then try to copy the file onto itself and fail.
-rm -f "$HOME/.claude/statusline-command.sh"
-cp "$SHARED_DIR/claude-statusline.sh" "$HOME/.claude/statusline-command.sh"
-chmod +x "$HOME/.claude/statusline-command.sh"
+# No chmod needed: the repo tracks claude-statusline.sh as executable, and the
+# installed path is a symlink to it.
+install_file "$SHARED_DIR/claude-statusline.sh" "$HOME/.claude/statusline-command.sh"
 
 echo "[7/8] Installing Ghostty config..."
-mkdir -p "$HOME/Library/Application Support/com.mitchellh.ghostty"
-cp "$SCRIPT_DIR/ghostty.config" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
+install_file "$SCRIPT_DIR/ghostty.config" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
 
 # Step 6: Set macOS defaults
 echo "[8/8] Setting macOS preferences..."
