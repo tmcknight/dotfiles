@@ -88,6 +88,10 @@ echo "[7/7] Installing configuration files..."
 install_file "$SHARED_DIR/.zshrc" "$HOME/.zshrc"
 install_file "$SHARED_DIR/.aliases" "$HOME/.aliases"
 
+# git config
+migrate_gitconfig
+install_file "$SHARED_DIR/.gitconfig" "$HOME/.gitconfig"
+
 # oh-my-posh themes
 install_file "$SHARED_DIR/theme.omp.json" "$HOME/.config/oh-my-posh/theme.omp.json"
 

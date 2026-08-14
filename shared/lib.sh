@@ -36,3 +36,28 @@ install_file() {
 
     ln -sfn "$src" "$dest"
 }
+
+# migrate_gitconfig
+#
+# Move a pre-existing ~/.gitconfig aside to ~/.gitconfig.local before the
+# tracked one is linked over it. The tracked file includes .gitconfig.local at
+# the end, so identity, signing keys and credential helpers keep working — and
+# stay out of a public repo.
+migrate_gitconfig() {
+    local gitconfig="$HOME/.gitconfig"
+    local local_config="$HOME/.gitconfig.local"
+
+    # Nothing there, or we already linked it on a previous run.
+    [ -f "$gitconfig" ] || return 0
+    [ -L "$gitconfig" ] && return 0
+
+    # Never clobber an existing local config; install_file will back the old
+    # ~/.gitconfig up with a timestamp instead.
+    if [ -f "$local_config" ]; then
+        echo "  ~/.gitconfig.local already exists — leaving it as is."
+        return 0
+    fi
+
+    echo "  Moving existing ~/.gitconfig to ~/.gitconfig.local (identity, signing, helpers)"
+    mv "$gitconfig" "$local_config"
+}

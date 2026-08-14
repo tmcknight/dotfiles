@@ -46,6 +46,10 @@ echo "[5/8] Installing .zshrc..."
 install_file "$SHARED_DIR/.zshrc" "$HOME/.zshrc"
 install_file "$SHARED_DIR/.aliases" "$HOME/.aliases"
 
+echo "  Installing git config..."
+migrate_gitconfig
+install_file "$SHARED_DIR/.gitconfig" "$HOME/.gitconfig"
+
 echo "[6/8] Installing oh-my-posh themes..."
 install_file "$SHARED_DIR/theme.omp.json" "$HOME/.config/oh-my-posh/theme.omp.json"
 

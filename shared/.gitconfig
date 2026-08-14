@@ -1,0 +1,27 @@
+# Portable git settings, tracked in the dotfiles repo.
+#
+# Machine-specific configuration — identity, signing keys, credential helpers,
+# anything with an absolute path — belongs in ~/.gitconfig.local, which is not
+# tracked. The include at the bottom pulls it in; later values win, so anything
+# set there overrides this file.
+
+[init]
+	defaultBranch = main
+
+[pull]
+	ff = only
+
+[push]
+	autoSetupRemote = true
+
+[fetch]
+	prune = true
+
+[rebase]
+	autostash = true
+
+[diff]
+	colorMoved = zebra
+
+[include]
+	path = ~/.gitconfig.local
