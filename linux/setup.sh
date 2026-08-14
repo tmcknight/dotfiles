@@ -7,14 +7,26 @@ SHARED_DIR="$SCRIPT_DIR/../shared"
 echo "=== Linux Setup ==="
 echo ""
 
-# Step 1: Set default shell to zsh
-if [ "$SHELL" != "$(which zsh 2>/dev/null)" ]; then
-    echo "[1/7] Installing and setting default shell to zsh..."
-    sudo apt-get update
-    sudo apt-get install -y zsh zsh-autosuggestions unzip
-    chsh -s "$(which zsh)"
+# Everything below assumes apt. Fail here rather than part-way through with a
+# cascade of "apt-get: command not found".
+if ! command -v apt-get >/dev/null 2>&1; then
+    echo "This script supports Debian/Ubuntu only (apt-get not found)." >&2
+    exit 1
+fi
+
+# Step 1: Install zsh and make it the default shell.
+# The package install is unconditional: a box that already runs zsh (many
+# container images do) still needs zsh-autosuggestions, which ~/.zshrc sources.
+echo "[1/7] Installing zsh..."
+sudo apt-get update
+sudo apt-get install -y zsh zsh-autosuggestions unzip
+
+zsh_path=$(command -v zsh)
+if [ "$SHELL" != "$zsh_path" ]; then
+    echo "  Setting default shell to zsh..."
+    chsh -s "$zsh_path"
 else
-    echo "[1/7] Default shell is already zsh."
+    echo "  Default shell is already zsh."
 fi
 
 # Step 2: Create Developer directory
