@@ -50,3 +50,13 @@ do
     fi
 done
 unset _zsh_autosuggest
+
+# fnm — Node version manager, installed by the Brewfile. Replaces a global node.
+#   --use-on-cd               switch on cd, from .nvmrc/.node-version
+#   --version-file-strategy   also look in parent dirs, so monorepo subdirs work
+#   --resolve-engines         fall back to package.json engines.node
+if (( $+commands[fnm] )); then
+    eval "$(fnm env --use-on-cd --shell zsh \
+        --version-file-strategy=recursive \
+        --resolve-engines)"
+fi
