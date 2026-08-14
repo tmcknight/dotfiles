@@ -22,7 +22,7 @@ brew "zsh-autosuggestions"
 brew "jandedobbeleer/oh-my-posh/oh-my-posh"
 
 # Fonts
-cask "font-jetbrains-mono-nerd-font"
+cask "font-meslo-lg-nerd-font"
 
 # Applications
 cask "1password-cli"
