@@ -4,13 +4,29 @@
 
 input=$(cat)
 
+# Pull every field out in one jq pass. This runs on each prompt render, so the
+# seven separate jq invocations this replaces were the bulk of its cost.
+#
+# Fields are joined with U+001F (unit separator) rather than tabs: tab counts as
+# IFS whitespace, so bash would collapse runs of empty fields and shift every
+# later value into the wrong variable.
+IFS=$'\x1f' read -r cwd model used_pct five_pct five_reset seven_pct seven_reset <<< "$(
+  printf '%s' "$input" | jq -r '[
+    (.workspace.current_dir // .cwd // ""),
+    (.model.display_name // ""),
+    (.context_window.used_percentage // ""),
+    (.rate_limits.five_hour.used_percentage // ""),
+    (.rate_limits.five_hour.resets_at // ""),
+    (.rate_limits.seven_day.used_percentage // ""),
+    (.rate_limits.seven_day.resets_at // "")
+  ] | map(tostring) | join("\u001f")'
+)"
+
 # ANSI helpers (256-color approximations of hex palette)
 reset="\033[0m"
 bold="\033[1m"
 
 # Foreground colors (approximate palette colors)
-fg_fgb="\033[38;2;205;217;229m"   # #cdd9e5
-fg_ink="\033[38;2;28;33;40m"      # #1c2128
 fg_gray="\033[38;2;99;110;123m"   # #636e7b
 fg_green="\033[38;2;52;125;57m"   # #347d39
 fg_blue="\033[38;2;49;109;202m"   # #316dca
@@ -33,21 +49,34 @@ else
 fi
 
 # --- Segment 1: user@host (gray) ---
-user=$(whoami)
-host=$(hostname -s)
+user="${USER:-$(whoami)}"
+host="${HOSTNAME%%.*}"
+[ -n "$host" ] || host=$(hostname -s)
 printf "${fg_gray}${g_user}${bold}%s${reset}${fg_gray}@%s${reset}" "$user" "$host"
 
 # --- Segment 2: cwd (blue) ---
-cwd=$(echo "$input" | jq -r '.workspace.current_dir // .cwd // ""')
-# Shorten home directory to ~
+# Shorten home directory to ~. The tilde comes from a variable because a
+# backslash-escaped ~ in the replacement is emitted literally, as "\~".
 home="$HOME"
-display_dir="${cwd/#$home/\~}"
-# Show only the last two path components (folder style)
-folder=$(echo "$display_dir" | awk -F'/' '{
-  n=NF
-  if (n >= 2) print $(n-1) "/" $n
-  else print $n
-}')
+tilde="~"
+display_dir="${cwd/#$home/$tilde}"
+# Last two path components (folder style), via parameter expansion rather than
+# an awk subprocess.
+if [ "$display_dir" = "/" ]; then
+  folder="/"
+elif [[ "$display_dir" == */* ]]; then
+  folder="${display_dir##*/}"
+  parent="${display_dir%/*}"
+  parent="${parent##*/}"
+  if [ -n "$parent" ]; then
+    folder="$parent/$folder"
+  else
+    # One level below root, e.g. /tmp — the parent component is root itself.
+    folder="/$folder"
+  fi
+else
+  folder="$display_dir"
+fi
 printf "  ${fg_blue}${g_dir}${bold}%s${reset}" "$folder"
 
 # --- Segment 3: git branch (green/yellow) ---
@@ -112,7 +141,6 @@ if [ -n "$git_status" ]; then
 fi
 
 # --- Segment 4: Claude model (cyan) ---
-model=$(echo "$input" | jq -r '.model.display_name // empty')
 if [ -n "$model" ]; then
   printf "  ${fg_cyan}${g_model}${bold}%s${reset}" "$model"
 fi
@@ -121,7 +149,6 @@ fi
 printf "\n"
 
 # --- Segment 5: context usage (gray / yellow / red) ---
-used_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
 if [ -n "$used_pct" ]; then
   pct_int=$(printf "%.0f" "$used_pct")
   if [ "$pct_int" -ge 50 ]; then
@@ -166,22 +193,18 @@ rate_color() {
 
 now=$(date +%s)
 
-five_pct=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
 if [ -n "$five_pct" ]; then
   five_int=$(printf '%.0f' "$five_pct")
   five_color=$(rate_color "$five_int" 75 90)
-  five_reset=$(echo "$input" | jq -r '.rate_limits.five_hour.resets_at // empty')
   printf "  ${five_color}${g_5h}5h:%s%%${reset}" "$five_int"
   if [ -n "$five_reset" ]; then
     printf " ${five_color}(%s)${reset}" "$(fmt_remaining $(( five_reset - now )))"
   fi
 fi
 
-seven_pct=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
 if [ -n "$seven_pct" ]; then
   seven_int=$(printf '%.0f' "$seven_pct")
   seven_color=$(rate_color "$seven_int" 75 90)
-  seven_reset=$(echo "$input" | jq -r '.rate_limits.seven_day.resets_at // empty')
   printf "  ${seven_color}${g_7d}7d:%s%%${reset}" "$seven_int"
   if [ -n "$seven_reset" ]; then
     printf " ${seven_color}(%s)${reset}" "$(fmt_remaining $(( seven_reset - now )))"
