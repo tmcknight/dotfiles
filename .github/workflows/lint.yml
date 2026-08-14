@@ -10,17 +10,30 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Syntax check
+      - name: Bash syntax check
         run: |
           for f in install.sh macos/setup.sh linux/setup.sh shared/lib.sh shared/claude-statusline.sh; do
               bash -n "$f"
           done
 
-      - name: ShellCheck
+      # zsh is not on the runner image. shellcheck has no zsh support, so the
+      # zsh files below get a parse check only.
+      - name: Install linters
         run: |
           sudo apt-get update
-          sudo apt-get install -y shellcheck
-          shellcheck -x install.sh macos/setup.sh linux/setup.sh shared/lib.sh shared/claude-statusline.sh
+          sudo apt-get install -y shellcheck zsh
+
+      # Parse-only: this catches a typo that would break every new shell, but
+      # not a wrong flag or a pipe that yields nothing — both of which these
+      # files have shipped. Those need running the command.
+      - name: Zsh syntax check
+        run: |
+          for f in shared/.zshrc shared/.aliases; do
+              zsh -n "$f"
+          done
+
+      - name: ShellCheck
+        run: shellcheck -x install.sh macos/setup.sh linux/setup.sh shared/lib.sh shared/claude-statusline.sh
 
   powershell:
     runs-on: ubuntu-latest
