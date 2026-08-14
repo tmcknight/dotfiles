@@ -5,6 +5,20 @@ $ErrorActionPreference = 'Stop'
 # install apps
 winget import -i (Join-Path $PSScriptRoot 'WinGet\winget-packages.json')
 
+# Node is managed by fnm rather than a system-wide install, so the winget import
+# on its own leaves the machine with no node at all. winget only updates PATH
+# for *new* sessions, so re-read it from the registry to reach the fnm it just
+# installed.
+$env:Path = [Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' +
+            [Environment]::GetEnvironmentVariable('Path', 'User')
+
+# `fnm default` is the part that matters: --use-on-cd in the profile only
+# resolves a version inside a project that pins one, so without a default a
+# plain shell has no node. Re-running is a no-op; fnm warns and exits 0 when
+# the version is already installed.
+fnm install --lts
+fnm default lts-latest
+
 # install nerd font
 oh-my-posh font install meslo
 

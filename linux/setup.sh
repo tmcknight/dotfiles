@@ -23,7 +23,9 @@ fi
 # container images do) still needs zsh-autosuggestions, which ~/.zshrc sources.
 echo "[1/7] Installing zsh..."
 sudo apt-get update
-sudo apt-get install -y zsh zsh-autosuggestions unzip
+# curl and unzip are what the fnm installer in step 5 checks for and refuses to
+# run without.
+sudo apt-get install -y zsh zsh-autosuggestions unzip curl
 
 zsh_path=$(command -v zsh)
 if [ "$SHELL" != "$zsh_path" ]; then
@@ -64,14 +66,32 @@ else
     echo "[4/7] GitHub CLI already installed."
 fi
 
-# Step 5: Install Node.js
-if ! command -v node &>/dev/null; then
-    echo "[5/7] Installing Node.js..."
-    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-    sudo apt-get install -y nodejs
+# Step 5: Install fnm, then a Node LTS through it.
+#
+# --skip-shell is not optional here: ~/.zshrc is a symlink into this repo, and
+# without it the installer appends its own PATH block to the tracked file.
+# .zshrc already runs `fnm env`, so there is nothing for it to add.
+#
+# Installing into ~/.local/bin reuses the PATH entry .zshrc already sets up,
+# rather than the installer's default ~/.local/share/fnm, which is on no PATH.
+if ! command -v fnm &>/dev/null; then
+    echo "[5/7] Installing fnm..."
+    curl -fsSL https://fnm.vercel.app/install | bash -s -- \
+        --skip-shell --install-dir "$HOME/.local/bin"
 else
-    echo "[5/7] Node.js already installed."
+    echo "[5/7] fnm already installed."
 fi
+
+# This script is not interactive, so .zshrc has not run and ~/.local/bin is
+# not on PATH yet — but fnm was just installed there.
+export PATH="$HOME/.local/bin:$PATH"
+
+# `fnm default` is the part that matters: --use-on-cd only resolves a version
+# inside a project that pins one, so without a default a plain shell has no
+# node. Re-running is a no-op; fnm warns and exits 0 if already installed.
+echo "  Installing Node LTS via fnm..."
+fnm install --lts
+fnm default lts-latest
 
 # Step 6: Install oh-my-posh
 if ! command -v oh-my-posh &>/dev/null; then

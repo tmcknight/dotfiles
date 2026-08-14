@@ -41,7 +41,7 @@
 					"PackageIdentifier": "Amazon.AWSCLI"
 				},
 				{
-					"PackageIdentifier": "OpenJS.NodeJS"
+					"PackageIdentifier": "Schniz.fnm"
 				},
 				{
 					"PackageIdentifier": "Google.Chrome"
