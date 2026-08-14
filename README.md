@@ -33,12 +33,15 @@ The setup script will:
 1. Set default shell to zsh
 2. Create `~/Developer` directory
 3. Install [Homebrew](https://brew.sh) (+ Xcode Command Line Tools if not already installed)
-4. Install all packages and casks from the [Brewfile](macos/Brewfile)
-5. Link the [.zshrc](shared/.zshrc), [.aliases](shared/.aliases) and [.gitconfig](shared/.gitconfig)
-6. Link the [oh-my-posh theme](shared/theme.omp.json) to `~/.config/oh-my-posh/` and the
+4. Trust the third-party taps the [Brewfile](macos/Brewfile) declares, since Homebrew will
+   not load formulae or casks from an untrusted tap
+5. Install all packages and casks from the [Brewfile](macos/Brewfile)
+6. Install the Node LTS via [fnm](https://github.com/Schniz/fnm) and set it as the default
+7. Link the [.zshrc](shared/.zshrc), [.aliases](shared/.aliases) and [.gitconfig](shared/.gitconfig)
+8. Link the [oh-my-posh theme](shared/theme.omp.json) to `~/.config/oh-my-posh/` and the
    [Claude Code statusline](shared/claude-statusline.sh) to `~/.claude/`
-7. Link the [Ghostty config](macos/ghostty.config) to `~/Library/Application Support/com.mitchellh.ghostty/`
-8. Set macOS system preferences (Finder settings)
+9. Link the [Ghostty config](macos/ghostty.config) to `~/Library/Application Support/com.mitchellh.ghostty/`
+10. Set macOS system preferences (Finder settings)
 
 ### Linux (Debian/Ubuntu)
 
