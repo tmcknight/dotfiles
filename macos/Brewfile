@@ -7,6 +7,12 @@ tap "typewhisper/tap"
 brew "azure-cli"
 brew "azure-dev"
 brew "doctl"
+# The .NET SDK. This is the formula, not the `dotnet-sdk` cask, because the
+# `powershell` formula depends on it and the two fight over
+# /opt/homebrew/bin/dotnet -- whichever loses leaves `brew link` failing on
+# every bundle. Rider does not find this layout on its own: point its SDK path
+# at /opt/homebrew/opt/dotnet/libexec.
+brew "dotnet"
 brew "eza"
 brew "ffmpeg"
 brew "fnm"
@@ -31,7 +37,6 @@ cask "claude-code@latest"
 cask "cloudflare-warp"
 cask "copilot-cli"
 cask "docker-desktop"
-cask "dotnet-sdk"
 cask "figma"
 cask "firefox"
 cask "ghostty"
