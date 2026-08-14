@@ -40,3 +40,23 @@ $ProfileDir = "$HOME\Documents\PowerShell"
 New-Item -ItemType Directory -Force -Path $ProfileDir | Out-Null
 Copy-Item (Join-Path $PSScriptRoot 'Powershell\Microsoft.PowerShell_profile.ps1') "$ProfileDir\Microsoft.PowerShell_profile.ps1" -Force
 Unblock-File -Path "$ProfileDir\Microsoft.PowerShell_profile.ps1"
+
+Write-Host ""
+Write-Host "=== Setup complete! ==="
+
+# Load the new profile. Dot-sourcing it from here would not work: the prompt
+# function and `wu` would land in this script's scope and vanish on exit. So
+# hand over to a fresh pwsh session instead, which loads the profile itself and
+# picks up the PATH winget just changed. Exiting it returns to this session.
+#
+# Skipped when there is no interactive console (CI, `-NonInteractive`), where
+# waiting on a shell nobody can type into would hang the run. Also skipped when
+# pwsh is missing — the profile lives under Documents\PowerShell, which only
+# PowerShell 7+ reads, so Windows PowerShell would start without it.
+$pwsh = Get-Command pwsh -ErrorAction SilentlyContinue
+if (-not $pwsh -or -not [Environment]::UserInteractive -or $env:CI) {
+    Write-Host "Open a new PowerShell session to load the new profile."
+} else {
+    Write-Host "Reloading your shell (exit it to return to the previous one)..."
+    & $pwsh.Source -NoLogo
+}

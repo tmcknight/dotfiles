@@ -61,3 +61,25 @@ migrate_gitconfig() {
     echo "  Moving existing ~/.gitconfig to ~/.gitconfig.local (identity, signing, helpers)"
     mv "$gitconfig" "$local_config"
 }
+
+# reload_shell
+#
+# Replace this script's process with a fresh zsh login shell so the config that
+# was just installed is live without opening a new terminal. A child process
+# cannot re-source the parent shell's rc file, so `exec` is as close as a script
+# can get: everything after this line never runs.
+#
+# Skipped when stdin is not a terminal (`curl … | bash`, CI), where handing over
+# to an interactive shell would hang the pipeline instead of helping.
+reload_shell() {
+    local zsh_bin
+    zsh_bin="$(command -v zsh || true)"
+
+    if [ -z "$zsh_bin" ] || [ ! -t 0 ]; then
+        echo "Open a new terminal to load the new shell configuration."
+        return 0
+    fi
+
+    echo "Reloading your shell (exit it to return to the previous one)..."
+    exec "$zsh_bin" -l
+}

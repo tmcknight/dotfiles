@@ -21,7 +21,7 @@ fi
 # Step 1: Install zsh and make it the default shell.
 # The package install is unconditional: a box that already runs zsh (many
 # container images do) still needs zsh-autosuggestions, which ~/.zshrc sources.
-echo "[1/7] Installing zsh..."
+echo "[1/8] Installing zsh..."
 sudo apt-get update
 # curl and unzip are what the fnm installer in step 5 checks for and refuses to
 # run without.
@@ -36,12 +36,12 @@ else
 fi
 
 # Step 2: Create Developer directory
-echo "[2/7] Creating ~/Developer directory..."
+echo "[2/8] Creating ~/Developer directory..."
 mkdir -p "$HOME/Developer"
 
 # Step 3: Install eza
 if ! command -v eza &>/dev/null; then
-    echo "[3/7] Installing eza..."
+    echo "[3/8] Installing eza..."
     sudo apt-get install -y gpg
     sudo mkdir -p /etc/apt/keyrings
     wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
@@ -50,12 +50,12 @@ if ! command -v eza &>/dev/null; then
     sudo apt-get update
     sudo apt-get install -y eza
 else
-    echo "[3/7] eza already installed."
+    echo "[3/8] eza already installed."
 fi
 
 # Step 4: Install GitHub CLI
 if ! command -v gh &>/dev/null; then
-    echo "[4/7] Installing GitHub CLI..."
+    echo "[4/8] Installing GitHub CLI..."
     sudo mkdir -p /etc/apt/keyrings
     wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg >/dev/null
     sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
@@ -63,7 +63,7 @@ if ! command -v gh &>/dev/null; then
     sudo apt-get update
     sudo apt-get install -y gh
 else
-    echo "[4/7] GitHub CLI already installed."
+    echo "[4/8] GitHub CLI already installed."
 fi
 
 # Step 5: Install fnm, then a Node LTS through it.
@@ -75,11 +75,11 @@ fi
 # Installing into ~/.local/bin reuses the PATH entry .zshrc already sets up,
 # rather than the installer's default ~/.local/share/fnm, which is on no PATH.
 if ! command -v fnm &>/dev/null; then
-    echo "[5/7] Installing fnm..."
+    echo "[5/8] Installing fnm..."
     curl -fsSL https://fnm.vercel.app/install | bash -s -- \
         --skip-shell --install-dir "$HOME/.local/bin"
 else
-    echo "[5/7] fnm already installed."
+    echo "[5/8] fnm already installed."
 fi
 
 # This script is not interactive, so .zshrc has not run and ~/.local/bin is
@@ -95,14 +95,14 @@ fnm default lts-latest
 
 # Step 6: Install oh-my-posh
 if ! command -v oh-my-posh &>/dev/null; then
-    echo "[6/7] Installing oh-my-posh..."
+    echo "[6/8] Installing oh-my-posh..."
     curl -s https://ohmyposh.dev/install.sh | bash -s
 else
-    echo "[6/7] oh-my-posh already installed."
+    echo "[6/8] oh-my-posh already installed."
 fi
 
 # Step 7: Install dotfiles
-echo "[7/7] Installing configuration files..."
+echo "[7/8] Installing configuration files..."
 
 # .zshrc
 install_file "$SHARED_DIR/.zshrc" "$HOME/.zshrc"
@@ -129,4 +129,7 @@ install_file "$SHARED_DIR/claude-statusline.sh" "$HOME/.claude/statusline-comman
 
 echo ""
 echo "=== Setup complete! ==="
-echo "Open a new terminal to load the new shell configuration."
+
+# Step 8: Reload the shell config
+echo "[8/8] Loading the new shell configuration..."
+reload_shell

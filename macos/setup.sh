@@ -13,19 +13,19 @@ echo ""
 
 # Set default shell to zsh
 if [ "$SHELL" != "/bin/zsh" ]; then
-    echo "[1/10] Setting default shell to zsh..."
+    echo "[1/11] Setting default shell to zsh..."
     chsh -s /bin/zsh
 else
-    echo "[1/10] Default shell is already zsh."
+    echo "[1/11] Default shell is already zsh."
 fi
 
 # Create Developer directory
-echo "[2/10] Creating ~/Developer directory..."
+echo "[2/11] Creating ~/Developer directory..."
 mkdir -p "$HOME/Developer"
 
 # Install Homebrew if not present (also installs Xcode CLT)
 if ! command -v brew &>/dev/null; then
-    echo "[3/10] Installing Homebrew..."
+    echo "[3/11] Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
     # Add brew to PATH for Apple Silicon
@@ -33,7 +33,7 @@ if ! command -v brew &>/dev/null; then
         eval "$(/opt/homebrew/bin/brew shellenv)"
     fi
 else
-    echo "[3/10] Homebrew already installed, updating..."
+    echo "[3/11] Homebrew already installed, updating..."
     brew update
 fi
 
@@ -43,14 +43,14 @@ fi
 # declares -- nothing broader -- so adding a tap to the Brewfile is the single
 # place that decision gets made. `brew trust` is idempotent and does not need
 # the tap to be tapped yet.
-echo "[4/10] Trusting third-party taps from Brewfile..."
+echo "[4/11] Trusting third-party taps from Brewfile..."
 while read -r tap; do
     echo "  $tap"
     brew trust --tap "$tap"
 done < <(awk -F'"' '/^tap "/ { print $2 }' "$SCRIPT_DIR/Brewfile")
 
 # Install packages from Brewfile
-echo "[5/10] Installing packages from Brewfile..."
+echo "[5/11] Installing packages from Brewfile..."
 brew bundle --verbose --file="$SCRIPT_DIR/Brewfile"
 
 # Node is managed by fnm, not a global brew node, so the Brewfile alone leaves
@@ -58,12 +58,12 @@ brew bundle --verbose --file="$SCRIPT_DIR/Brewfile"
 # it, the --use-on-cd hook in .zshrc only resolves a version inside projects
 # that pin one, and a plain shell has no node. Re-running is a no-op; fnm warns
 # and exits 0 if the version is already installed.
-echo "[6/10] Installing Node LTS via fnm..."
+echo "[6/11] Installing Node LTS via fnm..."
 fnm install --lts
 fnm default lts-latest
 
 # Link .zshrc, aliases and git config into place
-echo "[7/10] Installing shell and git config..."
+echo "[7/11] Installing shell and git config..."
 install_file "$SHARED_DIR/.zshrc" "$HOME/.zshrc"
 install_file "$SHARED_DIR/.aliases" "$HOME/.aliases"
 
@@ -71,7 +71,7 @@ echo "  Installing git config..."
 migrate_gitconfig
 install_file "$SHARED_DIR/.gitconfig" "$HOME/.gitconfig"
 
-echo "[8/10] Installing oh-my-posh themes..."
+echo "[8/11] Installing oh-my-posh themes..."
 install_file "$SHARED_DIR/theme.omp.json" "$HOME/.config/oh-my-posh/theme.omp.json"
 
 # Claude Code statusline.
@@ -81,11 +81,11 @@ install_file "$SHARED_DIR/theme.omp.json" "$HOME/.config/oh-my-posh/theme.omp.js
 # installed path is a symlink to it.
 install_file "$SHARED_DIR/claude-statusline.sh" "$HOME/.claude/statusline-command.sh"
 
-echo "[9/10] Installing Ghostty config..."
+echo "[9/11] Installing Ghostty config..."
 install_file "$SCRIPT_DIR/ghostty.config" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
 
 # Set macOS defaults
-echo "[10/10] Setting macOS preferences..."
+echo "[10/11] Setting macOS preferences..."
 
 # Show filename extensions in Finder
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
@@ -134,4 +134,7 @@ killall Finder 2>/dev/null || true
 
 echo ""
 echo "=== Setup complete! ==="
-echo "Open a new terminal to load the new shell configuration."
+
+# Step 11: Reload the shell config
+echo "[11/11] Loading the new shell configuration..."
+reload_shell
