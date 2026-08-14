@@ -7,7 +7,12 @@ alias lx='eza -lbhHigUmuSa@ --time-style=long-iso --git --color-scale --color=al
 
 alias lS='eza -1 --color=always --group-directories-first --icons=always'
 alias lt='eza --tree --level=2 --color=always --group-directories-first --icons=always'
-alias l.="eza -a | grep -E '^\.'"
+# The explicit `.` is load-bearing: with no path argument and stdout not a
+# tty, eza prints nothing at all, so the grep saw an empty stream and this
+# alias silently produced no output. -1 pins one-name-per-line (already the
+# case when piped) and no --color, so escape codes cannot precede the dot
+# and defeat the '^' anchor.
+alias l.="eza -a -1 . | grep -E '^\.'"
 
 alias bu='brew update'
 alias buu='brew update && brew upgrade'
