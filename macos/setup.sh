@@ -102,8 +102,11 @@ defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 # Use list view as default in all Finder windows
 defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 
-# Show ~/Library folder (hidden by default)
-chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
+# Show ~/Library folder (hidden by default).
+# `xattr -d` exits 1 when the attribute is absent, which is the normal case on
+# modern macOS — without the guard that aborts the whole script under `set -e`.
+chflags nohidden ~/Library
+xattr -d com.apple.FinderInfo ~/Library 2>/dev/null || true
 
 # Expand General and Open With panes in Get Info window
 defaults write com.apple.finder FXInfoPanesExpanded -dict \
