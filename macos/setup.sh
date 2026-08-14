@@ -13,19 +13,19 @@ echo ""
 
 # Set default shell to zsh
 if [ "$SHELL" != "/bin/zsh" ]; then
-    echo "[1/8] Setting default shell to zsh..."
+    echo "[1/9] Setting default shell to zsh..."
     chsh -s /bin/zsh
 else
-    echo "[1/8] Default shell is already zsh."
+    echo "[1/9] Default shell is already zsh."
 fi
 
 # Create Developer directory
-echo "[2/8] Creating ~/Developer directory..."
+echo "[2/9] Creating ~/Developer directory..."
 mkdir -p "$HOME/Developer"
 
 # Install Homebrew if not present (also installs Xcode CLT)
 if ! command -v brew &>/dev/null; then
-    echo "[3/8] Installing Homebrew..."
+    echo "[3/9] Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
     # Add brew to PATH for Apple Silicon
@@ -33,16 +33,25 @@ if ! command -v brew &>/dev/null; then
         eval "$(/opt/homebrew/bin/brew shellenv)"
     fi
 else
-    echo "[3/8] Homebrew already installed, updating..."
+    echo "[3/9] Homebrew already installed, updating..."
     brew update
 fi
 
 # Install packages from Brewfile
-echo "[4/8] Installing packages from Brewfile..."
+echo "[4/9] Installing packages from Brewfile..."
 brew bundle --verbose --file="$SCRIPT_DIR/Brewfile"
 
+# Node is managed by fnm, not a global brew node, so the Brewfile alone leaves
+# a machine with no node at all. `fnm default` is the part that matters: without
+# it, the --use-on-cd hook in .zshrc only resolves a version inside projects
+# that pin one, and a plain shell has no node. Re-running is a no-op; fnm warns
+# and exits 0 if the version is already installed.
+echo "[5/9] Installing Node LTS via fnm..."
+fnm install --lts
+fnm default lts-latest
+
 # Link .zshrc, aliases and git config into place
-echo "[5/8] Installing shell and git config..."
+echo "[6/9] Installing shell and git config..."
 install_file "$SHARED_DIR/.zshrc" "$HOME/.zshrc"
 install_file "$SHARED_DIR/.aliases" "$HOME/.aliases"
 
@@ -50,7 +59,7 @@ echo "  Installing git config..."
 migrate_gitconfig
 install_file "$SHARED_DIR/.gitconfig" "$HOME/.gitconfig"
 
-echo "[6/8] Installing oh-my-posh themes..."
+echo "[7/9] Installing oh-my-posh themes..."
 install_file "$SHARED_DIR/theme.omp.json" "$HOME/.config/oh-my-posh/theme.omp.json"
 
 # Claude Code statusline.
@@ -60,11 +69,11 @@ install_file "$SHARED_DIR/theme.omp.json" "$HOME/.config/oh-my-posh/theme.omp.js
 # installed path is a symlink to it.
 install_file "$SHARED_DIR/claude-statusline.sh" "$HOME/.claude/statusline-command.sh"
 
-echo "[7/8] Installing Ghostty config..."
+echo "[8/9] Installing Ghostty config..."
 install_file "$SCRIPT_DIR/ghostty.config" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
 
 # Set macOS defaults
-echo "[8/8] Setting macOS preferences..."
+echo "[9/9] Setting macOS preferences..."
 
 # Show filename extensions in Finder
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
