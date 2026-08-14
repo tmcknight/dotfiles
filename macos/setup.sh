@@ -71,6 +71,10 @@ echo "  Installing git config..."
 migrate_gitconfig
 install_file "$SHARED_DIR/.gitconfig" "$HOME/.gitconfig"
 
+# Unattended signing helpers, sourced by .zshrc. Inert until a key exists at
+# $GIT_SIGNING_KEY, so linking it on every machine costs nothing.
+install_file "$SHARED_DIR/git-signing.sh" "$HOME/.git-signing.sh"
+
 echo "[8/11] Installing oh-my-posh themes..."
 install_file "$SHARED_DIR/theme.omp.json" "$HOME/.config/oh-my-posh/theme.omp.json"
 

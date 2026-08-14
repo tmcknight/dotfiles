@@ -112,6 +112,11 @@ install_file "$SHARED_DIR/.aliases" "$HOME/.aliases"
 migrate_gitconfig
 install_file "$SHARED_DIR/.gitconfig" "$HOME/.gitconfig"
 
+# Unattended signing helpers, sourced by .zshrc. This is the case they exist
+# for: an interactive signing agent needs a desktop session, which a remote box
+# does not have, so without an on-disk key it cannot sign a commit at all.
+install_file "$SHARED_DIR/git-signing.sh" "$HOME/.git-signing.sh"
+
 # oh-my-posh themes
 install_file "$SHARED_DIR/theme.omp.json" "$HOME/.config/oh-my-posh/theme.omp.json"
 

@@ -12,7 +12,7 @@ jobs:
 
       - name: Bash syntax check
         run: |
-          for f in install.sh macos/setup.sh linux/setup.sh shared/lib.sh shared/claude-statusline.sh; do
+          for f in install.sh macos/setup.sh linux/setup.sh shared/lib.sh shared/claude-statusline.sh shared/git-signing.sh; do
               bash -n "$f"
           done
 
@@ -33,7 +33,7 @@ jobs:
           done
 
       - name: ShellCheck
-        run: shellcheck -x install.sh macos/setup.sh linux/setup.sh shared/lib.sh shared/claude-statusline.sh
+        run: shellcheck -x install.sh macos/setup.sh linux/setup.sh shared/lib.sh shared/claude-statusline.sh shared/git-signing.sh
 
   powershell:
     runs-on: ubuntu-latest

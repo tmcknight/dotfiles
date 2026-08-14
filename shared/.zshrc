@@ -65,3 +65,10 @@ fi
 # Machine-specific config — absolute paths, work-only tooling, secrets. Not
 # tracked. Sourced last so it can override anything above.
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
+
+# Unattended commit signing. Sourced after .zshrc.local, which is where
+# GIT_SIGNING_KEY and anything the untracked half needs get set — this reads
+# them, so it cannot run first. Defines git-signing-{on,off,status} and, when
+# GIT_SIGNING_UNATTENDED=1 is already in the environment, switches signing over
+# to the on-disk key for this shell.
+[ -f ~/.git-signing.sh ] && source ~/.git-signing.sh
