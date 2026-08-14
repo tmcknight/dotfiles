@@ -60,3 +60,7 @@ if (( $+commands[fnm] )); then
         --version-file-strategy=recursive \
         --resolve-engines)"
 fi
+
+# Machine-specific config — absolute paths, work-only tooling, secrets. Not
+# tracked. Sourced last so it can override anything above.
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
