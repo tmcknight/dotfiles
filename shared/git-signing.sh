@@ -27,9 +27,16 @@
 # key on a machine only if you would trust that machine with your identity, and
 # revoke it if the machine is lost.
 
-# Which key git-signing-on switches to. Override in ~/.zshrc.local if you keep
-# it somewhere else.
-GIT_SIGNING_KEY="${GIT_SIGNING_KEY:-$HOME/.ssh/id_ed25519_git_signing}"
+# Which key git-signing-on switches to. Override in ~/.zshrc.local for the
+# interactive path, or ~/.zshenv.local for the unattended one — .zshenv runs
+# before .zshrc, so an override that only lives in .zshrc.local arrives after
+# the automatic opt-in at the bottom of this file has already chosen a key.
+#
+# Exported, not a plain shell variable: an agent runner restores a captured
+# shell where the functions below survive but unexported variables do not, so
+# without this a later `git-signing-on` in that shell reports "no key at " with
+# an empty path.
+export GIT_SIGNING_KEY="${GIT_SIGNING_KEY:-$HOME/.ssh/id_ed25519_git_signing}"
 
 # git-signing-on
 #
@@ -109,6 +116,12 @@ git-signing-status() {
 # Opt in for a whole session without typing anything: set GIT_SIGNING_UNATTENDED=1
 # in the environment before the shell starts. This is the hook for agent runners
 # and remote hosts, where there is no interactive moment to run a command in.
+#
+# "Before the shell starts" is load-bearing, and .zshrc cannot honour it: a
+# runner that injects the variable per command sets it *after* the login shell
+# read .zshrc, so this test would see nothing. ~/.zshenv is sourced by every
+# zsh, including each of those commands, and sources this file for that case —
+# which is why the unattended path works at all.
 if [ "${GIT_SIGNING_UNATTENDED:-0}" = "1" ] && [ -f "$GIT_SIGNING_KEY" ]; then
     git-signing-on
 fi

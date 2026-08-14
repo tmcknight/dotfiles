@@ -28,7 +28,7 @@ jobs:
       # files have shipped. Those need running the command.
       - name: Zsh syntax check
         run: |
-          for f in shared/.zshrc shared/.aliases; do
+          for f in shared/.zshenv shared/.zshrc shared/.aliases; do
               zsh -n "$f"
           done
 

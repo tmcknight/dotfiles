@@ -108,6 +108,11 @@ echo "[7/8] Installing configuration files..."
 install_file "$SHARED_DIR/.zshrc" "$HOME/.zshrc"
 install_file "$SHARED_DIR/.aliases" "$HOME/.aliases"
 
+# .zshenv, read by every zsh rather than only interactive ones. Carries the
+# unattended-signing hook, which is the case a remote box needs most: a runner
+# or an ssh command never sources .zshrc at all.
+install_file "$SHARED_DIR/.zshenv" "$HOME/.zshenv"
+
 # git config
 migrate_gitconfig
 install_file "$SHARED_DIR/.gitconfig" "$HOME/.gitconfig"

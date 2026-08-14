@@ -67,6 +67,11 @@ echo "[7/11] Installing shell and git config..."
 install_file "$SHARED_DIR/.zshrc" "$HOME/.zshrc"
 install_file "$SHARED_DIR/.aliases" "$HOME/.aliases"
 
+# .zshenv, which zsh reads for every shell rather than only interactive ones.
+# Required for the unattended-signing hook below: an agent runner injects
+# GIT_SIGNING_UNATTENDED into each command's environment, after .zshrc was read.
+install_file "$SHARED_DIR/.zshenv" "$HOME/.zshenv"
+
 echo "  Installing git config..."
 migrate_gitconfig
 install_file "$SHARED_DIR/.gitconfig" "$HOME/.gitconfig"

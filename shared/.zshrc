@@ -66,9 +66,12 @@ fi
 # tracked. Sourced last so it can override anything above.
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
 
-# Unattended commit signing. Sourced after .zshrc.local, which is where
-# GIT_SIGNING_KEY and anything the untracked half needs get set — this reads
-# them, so it cannot run first. Defines git-signing-{on,off,status} and, when
-# GIT_SIGNING_UNATTENDED=1 is already in the environment, switches signing over
-# to the on-disk key for this shell.
+# Commit signing. Sourced after .zshrc.local, which is where GIT_SIGNING_KEY and
+# anything the untracked half needs get set — this reads them, so it cannot run
+# first. Defines git-signing-{on,off,status} for use at the prompt.
+#
+# The *unattended* opt-in is not this file's job any more, though sourcing here
+# still triggers it for a shell that inherited GIT_SIGNING_UNATTENDED=1 from its
+# parent. A runner that injects that variable per command sets it after this
+# file was read, so ~/.zshenv owns that case — see the note there.
 [ -f ~/.git-signing.sh ] && source ~/.git-signing.sh
