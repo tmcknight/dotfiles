@@ -49,9 +49,20 @@ cp "$SHARED_DIR/.aliases" "$HOME/.aliases"
 echo "[6/8] Installing oh-my-posh themes..."
 mkdir -p "$HOME/.config/oh-my-posh"
 cp "$SHARED_DIR/theme.omp.json" "$HOME/.config/oh-my-posh/theme.omp.json"
-cp "$SHARED_DIR/claude.omp.json" "$HOME/.config/oh-my-posh/claude.omp.json"
-# To enable the Claude Code statusline, add this to ~/.claude/settings.json:
-#   "statusLine": { "type": "command", "command": "oh-my-posh claude --config ~/.config/oh-my-posh/claude.omp.json", "padding": 0 }
+
+# Claude Code statusline.
+# Requires jq. To enable, add this to ~/.claude/settings.json:
+#   "statusLine": { "type": "command", "command": "bash ~/.claude/statusline-command.sh" }
+mkdir -p "$HOME/.claude"
+if [ -f "$HOME/.claude/statusline-command.sh" ]; then
+    echo "  Backing up existing statusline-command.sh to ~/.claude/statusline-command.sh.backup"
+    cp "$HOME/.claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh.backup"
+fi
+# rm first: on a dev machine this path may be a symlink back into the repo,
+# and cp would then try to copy the file onto itself and fail.
+rm -f "$HOME/.claude/statusline-command.sh"
+cp "$SHARED_DIR/claude-statusline.sh" "$HOME/.claude/statusline-command.sh"
+chmod +x "$HOME/.claude/statusline-command.sh"
 
 echo "[7/8] Installing Ghostty config..."
 mkdir -p "$HOME/Library/Application Support/com.mitchellh.ghostty"
