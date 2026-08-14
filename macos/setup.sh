@@ -11,7 +11,7 @@ source "$SHARED_DIR/lib.sh"
 echo "=== macOS Setup ==="
 echo ""
 
-# Step 1: Set default shell to zsh
+# Set default shell to zsh
 if [ "$SHELL" != "/bin/zsh" ]; then
     echo "[1/8] Setting default shell to zsh..."
     chsh -s /bin/zsh
@@ -19,11 +19,11 @@ else
     echo "[1/8] Default shell is already zsh."
 fi
 
-# Step 2: Create Developer directory
+# Create Developer directory
 echo "[2/8] Creating ~/Developer directory..."
 mkdir -p "$HOME/Developer"
 
-# Step 3: Install Homebrew if not present (also installs Xcode CLT)
+# Install Homebrew if not present (also installs Xcode CLT)
 if ! command -v brew &>/dev/null; then
     echo "[3/8] Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -37,12 +37,12 @@ else
     brew update
 fi
 
-# Step 2: Install packages from Brewfile
+# Install packages from Brewfile
 echo "[4/8] Installing packages from Brewfile..."
 brew bundle --verbose --file="$SCRIPT_DIR/Brewfile"
 
-# Step 3: Copy .zshrc and oh-my-posh theme
-echo "[5/8] Installing .zshrc..."
+# Link .zshrc, aliases and git config into place
+echo "[5/8] Installing shell and git config..."
 install_file "$SHARED_DIR/.zshrc" "$HOME/.zshrc"
 install_file "$SHARED_DIR/.aliases" "$HOME/.aliases"
 
@@ -63,7 +63,7 @@ install_file "$SHARED_DIR/claude-statusline.sh" "$HOME/.claude/statusline-comman
 echo "[7/8] Installing Ghostty config..."
 install_file "$SCRIPT_DIR/ghostty.config" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
 
-# Step 6: Set macOS defaults
+# Set macOS defaults
 echo "[8/8] Setting macOS preferences..."
 
 # Show filename extensions in Finder
