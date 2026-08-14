@@ -1,17 +1,52 @@
 # Load aliases
 [ -f ~/.aliases ] && source ~/.aliases
 
+# History. Without HISTFILE set, zsh keeps no history between sessions at all.
+HISTFILE=~/.zsh_history
+HISTSIZE=50000
+SAVEHIST=50000
+
+setopt SHARE_HISTORY        # live sync across open shells
+setopt EXTENDED_HISTORY     # timestamp + duration per entry
+setopt HIST_IGNORE_ALL_DUPS # keep only the most recent copy of a command
+setopt HIST_IGNORE_SPACE    # omit commands typed with a leading space
+setopt HIST_REDUCE_BLANKS
+setopt HIST_VERIFY          # expand !! onto the prompt instead of running it
+
 # Add oh-my-posh to PATH on Linux (installed to ~/.local/bin by default)
 if [[ -d "$HOME/.local/bin" ]]; then
     export PATH="$HOME/.local/bin:$PATH"
 fi
 
-if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
+# Completion. Homebrew drops per-formula completions (gh, pnpm, az, uv) into
+# share/zsh/site-functions, which is not on the default fpath.
+if [[ -d "${HOMEBREW_PREFIX:-/opt/homebrew}/share/zsh/site-functions" ]]; then
+    fpath=("${HOMEBREW_PREFIX:-/opt/homebrew}/share/zsh/site-functions" $fpath)
+fi
+
+autoload -Uz compinit
+# -C reuses the cached dump instead of re-scanning fpath on every shell start.
+# After installing something new: rm -f ~/.zcompdump && compinit
+compinit -C
+
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'  # case-insensitive
+
+# Prompt. `$+commands[...]` is a zsh builtin lookup — no subprocess.
+if [[ "$TERM_PROGRAM" != "Apple_Terminal" ]] && (( $+commands[oh-my-posh] )); then
     eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/theme.omp.json)"
 fi
 
-if [[ "$(uname)" == "Darwin" ]]; then
-    source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-else
-    source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-fi
+# zsh-autosuggestions. Probing known paths beats forking `brew --prefix` on
+# every shell start, and also picks up Intel Macs (/usr/local).
+for _zsh_autosuggest in \
+    "${HOMEBREW_PREFIX:-/opt/homebrew}/share/zsh-autosuggestions/zsh-autosuggestions.zsh" \
+    /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh \
+    /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+do
+    if [[ -f "$_zsh_autosuggest" ]]; then
+        source "$_zsh_autosuggest"
+        break
+    fi
+done
+unset _zsh_autosuggest
