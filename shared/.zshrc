@@ -62,6 +62,11 @@ if (( $+commands[fnm] )); then
         --resolve-engines)"
 fi
 
+# Skips the OSC 11 background-colour probe that glamour-based tools (gh) fire at
+# startup. Terminals that answer it slowly leave the reply in the tty buffer, and
+# the next prompt prints it as `11;rgb:...`.
+export GLAMOUR_STYLE=dark
+
 # Machine-specific config — absolute paths, work-only tooling, secrets. Not
 # tracked. Sourced last so it can override anything above.
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
