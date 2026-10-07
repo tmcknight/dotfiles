@@ -81,7 +81,7 @@ printf "  ${fg_blue}${g_dir}${bold}%s${reset}" "$folder"
 
 # --- Segment 3: git branch (green/yellow) ---
 # Single git invocation: branch name + ahead/behind + file status in one pass.
-git_status=$(git -C "$cwd" status --porcelain=v2 --branch 2>/dev/null)
+git_status=$(git --no-optional-locks -C "$cwd" status --porcelain=v2 --branch 2>/dev/null)
 if [ -n "$git_status" ]; then
   # Parse header + entry lines in one awk pass.
   # Outputs: <branch>\t<ahead>\t<behind>\t<staged>\t<unstaged>
