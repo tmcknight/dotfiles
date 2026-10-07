@@ -80,3 +80,5 @@ export GLAMOUR_STYLE=dark
 # parent. A runner that injects that variable per command sets it after this
 # file was read, so ~/.zshenv owns that case — see the note there.
 [ -f ~/.git-signing.sh ] && source ~/.git-signing.sh
+setopt interactivecomments
+if [ -d /opt/homebrew/opt/libpq/bin ]; then export PATH="/opt/homebrew/opt/libpq/bin:$PATH"; fi
