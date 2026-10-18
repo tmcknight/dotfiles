@@ -19,5 +19,6 @@ brew "jandedobbeleer/oh-my-posh/oh-my-posh"
 
 # Applications
 cask "1password-cli"
+cask "claude"
 cask "claude-code@latest"
 cask "tailscale-app"

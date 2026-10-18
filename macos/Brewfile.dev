@@ -27,7 +27,6 @@ brew "uv"
 cask "font-meslo-lg-nerd-font"
 
 # Applications
-cask "claude"
 cask "copilot-cli"
 cask "firefox"
 cask "ghostty"
