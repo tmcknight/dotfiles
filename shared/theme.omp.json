@@ -13,7 +13,10 @@
           "style": "diamond",
           "foreground": "p:fgb",
           "background": "p:gray",
-          "template": " {{ .UserName }} ",
+          "background_templates": [
+            "{{ if .SSHSession }}p:purple{{ end }}"
+          ],
+          "template": " {{ .UserName }}{{ if .SSHSession }}@{{ .HostName }}{{ end }} ",
           "leading_diamond": "",
           "trailing_diamond": ""
         },
