@@ -28,14 +28,25 @@ git -C ~/Developer/dotfiles pull
 
 ### macOS
 
+The setup script first asks which kind of machine this is, and remembers the
+answer in `~/.config/dotfiles/profile` so re-runs do not ask again. Set
+`DOTFILES_PROFILE=dev` or `DOTFILES_PROFILE=server` to skip the prompt.
+
+Both install [Brewfile.base](macos/Brewfile.base) (the shell, git and remote access),
+then their own Brewfile on top:
+
+- **server**: [Brewfile.server](macos/Brewfile.server), Docker via colima, tmux and the
+  Beszel agent. Steps 9 and 10 are skipped.
+- **dev**: [Brewfile.dev](macos/Brewfile.dev), the full toolchain and desktop apps.
+
 The setup script will:
 
 1. Set default shell to zsh
 2. Create `~/Developer` directory
 3. Install [Homebrew](https://brew.sh) (+ Xcode Command Line Tools if not already installed)
-4. Trust the third-party taps the [Brewfile](macos/Brewfile) declares, since Homebrew will
+4. Trust the third-party taps the profile's Brewfiles declare, since Homebrew will
    not load formulae or casks from an untrusted tap
-5. Install all packages and casks from the [Brewfile](macos/Brewfile)
+5. Install all packages and casks from the profile's Brewfiles
 6. Install the Node LTS via [fnm](https://github.com/Schniz/fnm) and set it as the default
 7. Link the [.zshrc](shared/.zshrc), [.aliases](shared/.aliases), [.gitconfig](shared/.gitconfig)
    and the [unattended signing helpers](shared/git-signing.sh)

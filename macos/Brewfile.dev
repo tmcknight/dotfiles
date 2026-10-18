@@ -1,10 +1,11 @@
+# Dev machine extras, installed on top of Brewfile.base. Anything both
+# profiles need belongs there, not here.
+
 # Taps
-tap "jandedobbeleer/oh-my-posh"
 tap "stablyai/orca"
 tap "typewhisper/tap"
 
 # CLI Tools
-brew "azure-cli"
 brew "azure-dev"
 brew "doctl"
 # The .NET SDK. This is the formula, not the `dotnet-sdk` cask, because the
@@ -13,11 +14,7 @@ brew "doctl"
 # every bundle. Rider does not find this layout on its own: point its SDK path
 # at /opt/homebrew/opt/dotnet/libexec.
 brew "dotnet"
-brew "eza"
 brew "ffmpeg"
-brew "fnm"
-brew "gh"
-brew "jq"
 brew "lefthook"
 brew "libpq"
 brew "msedit"
@@ -25,16 +22,12 @@ brew "powershell"
 brew "s3cmd"
 brew "shellcheck"
 brew "uv"
-brew "zsh-autosuggestions"
-brew "jandedobbeleer/oh-my-posh/oh-my-posh"
 
 # Fonts
 cask "font-meslo-lg-nerd-font"
 
 # Applications
-cask "1password-cli"
 cask "claude"
-cask "claude-code@latest"
 cask "copilot-cli"
 cask "firefox"
 cask "ghostty"
@@ -49,7 +42,6 @@ cask "notion"
 cask "notion-cli"
 cask "orbstack"
 cask "rider"
-cask "tailscale-app"
 cask "visual-studio-code"
 cask "whatsapp"
 cask "stablyai/orca/orca"

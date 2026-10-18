@@ -1,0 +1,19 @@
+# Server extras, installed on top of Brewfile.base. Anything a dev machine
+# needs too belongs there, not here.
+
+# Taps
+tap "henrygd/beszel"
+
+# CLI Tools
+# Docker runs in a colima VM rather than OrbStack: colima is CLI-only and runs
+# as a brew service, so containers come back after a reboot with nobody logged
+# in. OrbStack is a GUI app tied to a login session; it lives in Brewfile.dev.
+# socket_vmnet gives the VM its own address on the LAN (colima's
+# network.address), which bridged containers need.
+brew "colima"
+brew "docker"
+brew "docker-compose"
+brew "socket_vmnet"
+brew "tmux"
+# Reports to the Beszel hub. Start it with `brew services start beszel-agent`.
+brew "henrygd/beszel/beszel-agent"

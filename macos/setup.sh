@@ -8,7 +8,48 @@ SHARED_DIR="$SCRIPT_DIR/../shared"
 # shellcheck source=../shared/lib.sh
 source "$SHARED_DIR/lib.sh"
 
-echo "=== macOS Setup ==="
+# Which Brewfiles to install, and whether to set up desktop-only config.
+#   server: Brewfile.base + Brewfile.server -- shell, git, remote access, colima.
+#   dev:    Brewfile.base + Brewfile.dev, plus Ghostty and Finder prefs.
+# DOTFILES_PROFILE wins, then the choice saved by a previous run, then a prompt.
+# The choice is saved so a re-run (or a later `git pull` + setup) does not ask
+# again, nor quietly turn a server into a dev box.
+PROFILE_FILE="$HOME/.config/dotfiles/profile"
+
+profile="${DOTFILES_PROFILE:-}"
+if [ -z "$profile" ] && [ -f "$PROFILE_FILE" ]; then
+    profile="$(cat "$PROFILE_FILE")"
+    echo "Using saved profile '$profile' (set DOTFILES_PROFILE to override)."
+fi
+if [ -z "$profile" ]; then
+    if [ -t 0 ]; then
+        echo "Which kind of machine is this?"
+        echo "  1) dev    -- full dev toolchain and desktop apps"
+        echo "  2) server -- stripped down: shell, git, remote access, colima"
+        while [ -z "$profile" ]; do
+            read -r -p "Choose [1/2]: " choice
+            case "$choice" in
+                1|dev)    profile=dev ;;
+                2|server) profile=server ;;
+            esac
+        done
+    else
+        # Nothing to prompt on (CI, piped stdin). Dev is what this script
+        # installed before profiles existed.
+        echo "No terminal to prompt on; defaulting to the dev profile."
+        profile=dev
+    fi
+fi
+
+case "$profile" in
+    dev|server) brewfiles=("$SCRIPT_DIR/Brewfile.base" "$SCRIPT_DIR/Brewfile.$profile") ;;
+    *)          echo "Unknown profile '$profile' (expected 'dev' or 'server')." >&2; exit 1 ;;
+esac
+
+mkdir -p "$(dirname "$PROFILE_FILE")"
+echo "$profile" > "$PROFILE_FILE"
+
+echo "=== macOS Setup ($profile) ==="
 echo ""
 
 # Set default shell to zsh
@@ -40,18 +81,21 @@ fi
 # Homebrew refuses to load formulae and casks from third-party taps until they
 # are explicitly trusted, so on a fresh machine `brew bundle` aborts the moment
 # it reaches the first cask from one. Trust exactly the taps this Brewfile
-# declares -- nothing broader -- so adding a tap to the Brewfile is the single
+# declares -- nothing broader -- so adding a tap to a Brewfile is the single
 # place that decision gets made. `brew trust` is idempotent and does not need
 # the tap to be tapped yet.
-echo "[4/11] Trusting third-party taps from Brewfile..."
+echo "[4/11] Trusting third-party taps from the Brewfiles..."
 while read -r tap; do
     echo "  $tap"
     brew trust --tap "$tap"
-done < <(awk -F'"' '/^tap "/ { print $2 }' "$SCRIPT_DIR/Brewfile")
+done < <(awk -F'"' '/^tap "/ { print $2 }' "${brewfiles[@]}")
 
-# Install packages from Brewfile
-echo "[5/11] Installing packages from Brewfile..."
-brew bundle --verbose --file="$SCRIPT_DIR/Brewfile"
+# Install packages from the profile's Brewfiles, base first.
+echo "[5/11] Installing packages from the Brewfiles..."
+for brewfile in "${brewfiles[@]}"; do
+    echo "  $(basename "$brewfile")"
+    brew bundle --verbose --file="$brewfile"
+done
 
 # Node is managed by fnm, not a global brew node, so the Brewfile alone leaves
 # a machine with no node at all. `fnm default` is the part that matters: without
@@ -90,56 +134,63 @@ install_file "$SHARED_DIR/theme.omp.json" "$HOME/.config/oh-my-posh/theme.omp.js
 # installed path is a symlink to it.
 install_file "$SHARED_DIR/claude-statusline.sh" "$HOME/.claude/statusline-command.sh"
 
-echo "[9/11] Installing Ghostty config..."
-install_file "$SCRIPT_DIR/ghostty.config" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
+# Steps 9 and 10 are for a Mac someone sits at. A server has no Ghostty, and
+# nobody browsing it in Finder.
+if [ "$profile" = "server" ]; then
+    echo "[9/11] Skipping Ghostty config (server profile)."
+    echo "[10/11] Skipping macOS preferences (server profile)."
+else
+    echo "[9/11] Installing Ghostty config..."
+    install_file "$SCRIPT_DIR/ghostty.config" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
 
-# Set macOS defaults
-echo "[10/11] Setting macOS preferences..."
+    # Set macOS defaults
+    echo "[10/11] Setting macOS preferences..."
 
-# Show filename extensions in Finder
-defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+    # Show filename extensions in Finder
+    defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
-# Show path bar in Finder
-defaults write com.apple.finder ShowPathbar -bool true
+    # Show path bar in Finder
+    defaults write com.apple.finder ShowPathbar -bool true
 
-# Show status bar in Finder
-defaults write com.apple.finder ShowStatusBar -bool true
+    # Show status bar in Finder
+    defaults write com.apple.finder ShowStatusBar -bool true
 
-# Set new Finder windows to open to Desktop
-defaults write com.apple.finder NewWindowTarget -string "PfDe"
-defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Desktop/"
+    # Set new Finder windows to open to Desktop
+    defaults write com.apple.finder NewWindowTarget -string "PfDe"
+    defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Desktop/"
 
-# Show icons for external drives, internal drives, servers, and removable media on Desktop
-defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
-defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
-defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
-defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+    # Show icons for external drives, internal drives, servers, and removable media on Desktop
+    defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
+    defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
+    defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
+    defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 
-# Disable natural scroll direction
-defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
+    # Disable natural scroll direction
+    defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 
-# Show full POSIX path in Finder title bar
-defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+    # Show full POSIX path in Finder title bar
+    defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 
-# Disable warning when changing a file extension
-defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+    # Disable warning when changing a file extension
+    defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 
-# Use list view as default in all Finder windows
-defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+    # Use list view as default in all Finder windows
+    defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 
-# Show ~/Library folder (hidden by default).
-# `xattr -d` exits 1 when the attribute is absent, which is the normal case on
-# modern macOS — without the guard that aborts the whole script under `set -e`.
-chflags nohidden ~/Library
-xattr -d com.apple.FinderInfo ~/Library 2>/dev/null || true
+    # Show ~/Library folder (hidden by default).
+    # `xattr -d` exits 1 when the attribute is absent, which is the normal case on
+    # modern macOS — without the guard that aborts the whole script under `set -e`.
+    chflags nohidden ~/Library
+    xattr -d com.apple.FinderInfo ~/Library 2>/dev/null || true
 
-# Expand General and Open With panes in Get Info window
-defaults write com.apple.finder FXInfoPanesExpanded -dict \
-        General -bool true \
-        OpenWith -bool true \
+    # Expand General and Open With panes in Get Info window
+    defaults write com.apple.finder FXInfoPanesExpanded -dict \
+            General -bool true \
+            OpenWith -bool true \
 
-# Restart Finder to apply changes
-killall Finder 2>/dev/null || true
+    # Restart Finder to apply changes
+    killall Finder 2>/dev/null || true
+fi
 
 echo ""
 echo "=== Setup complete! ==="

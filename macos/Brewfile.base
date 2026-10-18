@@ -1,0 +1,23 @@
+# The base every Mac gets, server or dev: what the shell config and setup.sh
+# themselves rely on, plus remote access. Brewfile.server or Brewfile.dev is
+# installed on top of this, so nothing here needs repeating there.
+
+# Taps
+tap "jandedobbeleer/oh-my-posh"
+
+# CLI Tools
+# azure-cli: daily-brief's Azure cost report shells out to `az` on the server.
+# fnm: setup.sh installs the Node LTS through it.
+# jq: the Claude Code statusline parses its input with it.
+brew "azure-cli"
+brew "eza"
+brew "fnm"
+brew "gh"
+brew "jq"
+brew "zsh-autosuggestions"
+brew "jandedobbeleer/oh-my-posh/oh-my-posh"
+
+# Applications
+cask "1password-cli"
+cask "claude-code@latest"
+cask "tailscale-app"
