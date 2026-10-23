@@ -8,7 +8,7 @@ jobs:
   shell:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Bash syntax check
         run: |
@@ -38,7 +38,7 @@ jobs:
   powershell:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Parse PowerShell
         shell: pwsh
@@ -59,7 +59,7 @@ jobs:
   json:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Validate JSON configs
         run: |
